@@ -138,7 +138,7 @@ umd_courses %>%
 
 Describe what you think each line of this code is doing below, based on the result:
 
-**Answer: organizing each row by the term and adding the total number of courses for each term in the second column**
+**Answer: organizing each row by the term and adding the total number of courses for each term in the second column in automatic ascending order**
 
 ### Task 10: Adding arrange to sort the data
 
@@ -207,7 +207,7 @@ umd_courses %>%
 ```
 
 Compared to the previous codeblock, what has changed and how did that affect the result? What do the top terms have in common? 
-**Answer: We got by term the total number of classes, the total number of seats, the mean and median seats. It is similar to the previous code block in that it is arranged in descending order and grouped by term. It also counted classes and seats like above, but the mean and median number of seats are different in this code. **
+**Answer: We got by term the total number of classes, the total number of seats, the mean and median seats. It is similar to the previous code block in that it is arranged in descending order and grouped by term. It also counted classes and seats like above, but the mean and median number of seats are different in this codeblock. **
 
 ### Task 14: more aggregations
 
@@ -229,7 +229,7 @@ umd_courses %>%
 
 Compared to the previous codeblock, what has changed and how did that affect the result? How is the data sorted?
 
-**Answer**
+**Answer: This codeblock changed to group the data by department. In addition to showing the total seats, mean seat and median seats, the summary changed the codeblock to show the minimum and maximum seats. All of the columns are arranged by the total seat number in descending order.  **
 
 ### Task 12: Questions
 
@@ -237,8 +237,8 @@ No code here; I want you to provide three questions that this data suggests to y
 
 **Answer**
 
-1.  
+1.  I am wondering if we could find out how many sections of classes there are so we could determine the average number of seats in a section of class for each department. I know prospective students are always interested in class sizes.
 
-2.  
+2.  I would also like to ask how the total number of classes offered per term has changed, or if there is a trend in the number of classes being offered in each department based on the term.
 
-3.  
+3.  Last, I would like to ask which department is offering the most seats or classes and how that may have changed from term to term. Is there a trend in which majors are gaining more popularity? Is that affecting the number of seats available or causing students to struggle to get into classes?

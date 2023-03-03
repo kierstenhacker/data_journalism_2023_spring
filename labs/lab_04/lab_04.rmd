@@ -65,7 +65,7 @@ Then, when you are done standardizing `payee_clean`, export it as a new CSV file
 
 Then, using that `payee_clean` column, write code to find all of the spending where Facebook is the payee and calculate the total amount of spending for each committee and present the results showing the committee that spent the most first. Which committee is that?
 
-**A1.**
+**A1. The committee that spent the most where Facebook is the payee was "Jain Ashwani Friends of." **
 
 ```{r}
  media_md_expenses <- cleaned_md_expenses %>%
@@ -74,8 +74,8 @@ write_csv(media_md_expenses, "data/media_md_expenses.csv")
 
 media_md_expenses_clean <- read_csv("data/media_md_expenses_clean.csv")
 
-facebook_payments <- media_md_expenses_clean %>% 
-  filter(str_detect(payee_clean, "facebook")) | (str_detect(payee_clean, "meta")) %>%
+media_md_expenses_clean %>% 
+  filter(str_detect(payee_clean, "facebook") | str_detect(payee_clean, "meta")) %>%
   group_by(committee_name)%>%
   summarize(total_spending = sum(amount)) %>%
   arrange(desc(total_spending))
@@ -84,18 +84,23 @@ facebook_payments <- media_md_expenses_clean %>%
 
 **Q2.** Let's do some research on the top committees from question 1. Look up the top 10 spenders: if they are candidate committees, what offices were they running for? If they were not candidates, what issues do they seem to care about? Write some sentences answering those questions, then go the Facebook ad library (https://www.facebook.com/ads/library/?active_status=all&ad_type=political_and_issue_ads&country=US&sort_data\[direction\]=desc&sort_data\[mode\]=relevancy_monthly_grouped&media_type=all) and look for ads from the top spender. What do you notice about those ads?
 
-**A2.** 
+**A2. Ashwani Jain was a democrat running for governor in Maryland who sought to take money out of politics. He was also running on platform that supported women, people with disabilties and others who are members of minority groups. The other top spending came from the Franchot and Anderson-Walker ticket who were running for governor as well on the democratic ticket. CASA in Action is an organization that works to engage Latino voters and offer support and advocacy for Latino immigrants. Billy Boniface ran as a Republican for Harford County executive. Jon Baron ran for governor on the Democratic ticket. Salimah Jasani ran for the Baltimore City school board. The Working Families Party was another top spender, and it sometimes supports Democratic candidates in primaries or has its own candidates. The party values coming together despite differences to make the future of neighborhoods safe and communties stronger, something many people desire. King and Siri also ran for governor on the Democratic ticket. Last, Eve T. Shuman ran for the Prince George's County Council in District 3. The most interesting thing I noticed about Ashwani Jain, the top spender's, ads is that they have all been taken down because their disclaimer doesn't match Facebook's Advertising Standards. He was able to make fairly high impressions and his ads all reached tens of thousands of users. The ads varied in price, but some were over $1,000. ** 
 
 **Q3.** Given the list of top spenders in A1 and the primary results for governor (https://elections.maryland.gov/elections/2022/primary_results/gen_results_2022_1.html), who is missing from that A1 list? Did those campaigns run Facebook ads, according to Facebook's ad library? Who are the biggest recipients of media expenses by the Democratic primary winner for governor (HINT: that person has two committees)?
 
-**A3.** 
+**A3. Jerome M. Segal and Justinian M. Dispenza are missing from the list as well as Tom Perez and Shannon Sneed, Ralph W. Jaffe and Mark Greben, Douglas F. Gansler and Candace Hollingsworth, Rushern L. Baker, III and Nancy Navarro and Wes Moore and Aruna Miller. Jerome Segal only had one Facebook ad, Tom Perez had two and Rushern L. Baker and Douglas F. Gansler had one. Wes Moore also had several ads. The Democratic primary winner spent the most money at SKDK which is a strategic communications firm that focuses on public affairs and politcal consulting for Democratic candidates.** 
 
 ```{r}
+media_md_expenses_clean %>% 
+  filter(committee_name == "Moore  Wes For Maryland" | committee_name == "Moore Miller For Maryland Slate") %>%
+  group_by(payee_clean)%>%
+  summarize(total_spending = sum(amount)) %>%
+  arrange(desc(total_spending))
 ```
 
 **Q4.** The media expense data you cleaned also has a standardized purpose column. Write code to generate a list of the committees with the total amount of spending on online advertising. How does this list compare to the one from Q1 about top Facebook spenders? Of the top 5 committees who spent the most on Facebook ads from Q1, are there any that appear to have spent *all* of their online advertising dollars on Facebook?
 
-**A4.** 
+**A4. This list is almost entirely different from the first question, which could also be due to my own error if I did not code correctly. CASA is the fifth top spender on this list and was also a top spender in answer one. In fact, CASA was the only top spender from A1 on this list. The organization did not spend all their money on Facebook advertisements.** 
 
 ```{r}
 media_md_expenses_clean %>% 
@@ -107,4 +112,4 @@ media_md_expenses_clean %>%
 
 **Q5** You've been asked to summarize your findings about spending on Facebook by Maryland political candidates. How much do we know and what don't we know? What's the best story idea you've found here?
 
-**A5**
+**A5 The best story idea I can think of is the fact that candidates who spent a lot of money on Facebook ads were still not successful in winning the primary nomination. This calls into question the effectiveness of Facebook ads. We can also see trends toward different spending areas, like for example a strategic communications firm. We could also ask more about the practices of firms like SKDK and whether they are ethical for candidates. We don't know why candidates chose to turn to Facebook or to take their money elsewhere, which is interesting.**

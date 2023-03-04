@@ -1,0 +1,94 @@
+---
+title: "reverse_engineering_project"
+output: html_document
+date: "2023-03-04"
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+
+```{r}
+library(tidyverse)
+library(lubridate)
+library(refinr)
+library(janitor)
+```
+```{r}
+# Read in the data
+fatal_police_shootings<- read_csv("data/fatal_police_shootings_data.csv")
+```
+**The code below will work to answer the analysis posed in this sentence from the Washington Post article about fatal police shootings of women since 2015. "About 31 percent, or 77, of the 247 women fatally shot by police since 2015 had mental health issues, compared to 22 percent of the 5,362 men killed."**
+
+```{r}
+# Find total number of women shot since 2015
+women_shot <- fatal_police_shootings %>%
+  filter(gender == "female") %>%
+  summarise(
+    count = n()
+    )
+```
+```{r}
+# Find the number of women shot with mental health issues
+women_mental_illness <- fatal_police_shootings %>%
+  filter(was_mental_illness_related == TRUE & gender == "female") %>%
+   summarise (
+    count = n()
+  )
+   
+```
+
+```{r}
+# Find the percentage of women with mental illness shot
+women_mental_illness_pct <- women_mental_illness %>%
+  mutate(
+    pct_mentally_ill = women_mental_illness/women_shot*100
+  )
+```
+
+```{r} 
+# Find the total number of men shot since 2015
+men_shot <- fatal_police_shootings %>%
+  filter(gender == "male") %>%
+  summarise(
+    count = n()
+    )
+```
+
+```{r}
+# Find the number of men shot with mental health issues
+men_mental_illness <- fatal_police_shootings %>%
+  filter(was_mental_illness_related == TRUE & gender == "male") %>%
+   summarise (
+    count = n()
+   )
+```
+
+```{r}
+# Find the percentage of men with mental illness shot
+men_mental_illness_pct <- men_mental_illness %>%
+  mutate(
+    pct_mentally_ill = men_mental_illness/men_shot*100
+  )
+```
+

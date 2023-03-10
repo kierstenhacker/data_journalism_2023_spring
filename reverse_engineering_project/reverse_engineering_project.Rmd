@@ -42,7 +42,7 @@ fatal_police_shootings<- read_csv("data/fatal_police_shootings_data.csv")
 
 ```{r}
 # Find total number of women shot since 2015
-women_shot <- fatal_police_shootings %>%
+women_shot_count <- fatal_police_shootings %>%
   filter(gender == "female") %>%
   summarise(
     count = n()
@@ -90,5 +90,34 @@ men_mental_illness_pct <- men_mental_illness %>%
   mutate(
     pct_mentally_ill = men_mental_illness/men_shot*100
   )
+```
+
+**The code below will work to answer the analysis posed in this sentence from the Washington Post article about fatal police shootings of women since 2015. "Twenty of the 247 women were killed in that kind of situation, analysis shows. In 12 of those 20 shootings, police said the women killed were caught in crossfire or shot accidentally."**
+
+```{r}
+#Find the total number of women shot
+women_shot <- fatal_police_shootings %>%
+  filter(gender == "female")
+
+#Filter for women shot who were unarmed and count the total
+women_shot %>%
+  filter(armed_with == "unarmed") %>%
+    summarise(
+    count_unarmed = n()
+    )
+```
+```{r}
+#Filter for women shot by accident who were also unarmed
+women_shot %>%
+  filter(armed_with == "unarmed" & threat_type == "accident")
+```
+
+```{r}
+#Count the women shot by accident who were unarmed to find the total
+women_shot %>%
+  filter(armed_with == "unarmed" & threat_type == "accident") %>%
+    summarise(
+      count_accident = n()
+    )
 ```
 

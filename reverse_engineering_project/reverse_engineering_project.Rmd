@@ -120,4 +120,34 @@ women_shot %>%
       count_accident = n()
     )
 ```
+**The code below will work to answer the analysis posed in this sentence from the Washington Post article about fatal police shootings of women since 2015. "Since 2015, police have killed 26 unarmed women, including Taylor. Of those, 14 were White, seven were Black, four were Hispanic and one’s race was unknown. While about twice as many White women were shot and killed as Black women, White women account for five times the Black female population."**
+
+```{r}
+#Count the number of unarmed women by race who were shot 
+women_shot %>%
+  filter(armed_with == "unarmed") %>%
+  group_by(race) %>%
+  summarise (
+    count_race = n()
+  )
+  
+```
+
+```{r}
+#Find the number of white women and Black women in the population. 
+  #Female population based on the total of 334495017 and the percentage of females of 50.5% according to   U.S. Census data 
+  334485017 * 0.505
+```
+```{r}
+#Find the total population of Black women based on the percentages
+168914934 * 0.136
+```
+```{r}
+#Find the total population of white women based on the percentages
+168914934 * 0.758
+```
+```{r}
+#Divide the number of white women by the number of Black women to check if white women make up about 5 times the Black female population
+128037520/22972431
+```
 

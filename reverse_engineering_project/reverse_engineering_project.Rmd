@@ -135,7 +135,7 @@ women_shot %>%
 
 ```{r}
 #Find the number of white women and Black women in the population. 
-  #Female population based on the total of 334495017 and the percentage of females of 50.5% according to   U.S. Census data 
+  #Female population based on the total of 334485017 and the percentage of females of 50.5% according to   U.S. Census data 
   334485017 * 0.505
 ```
 ```{r}

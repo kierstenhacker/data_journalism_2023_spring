@@ -151,3 +151,54 @@ women_shot %>%
 128037520/22972431
 ```
 
+**Sentence text**: "Since 2015, Black women have accounted for less than 1 percent of the overall fatal shootings in cases where race was known. But within this small subset, Black women, who are 13 percent of the female population, account for 20 percent of the women shot and killed and 28 percent of the unarmed deaths."
+**Analysis summary**: We were able to confirm that black women account for less than 1 percent of overall cases where race was known. We were also able to verify that black women are about 13.6% of the female population. However, they only account for about 18% of women shot and killed. Additionally, black women only 14% of unarmed deaths, which is about half of what the story stated.
+
+```{r}
+# Find all cases where race was known
+shootings_race_known <- fatal_police_shootings %>% 
+  filter(!is.na(race)) %>% 
+  group_by(race) %>% 
+  summarise(
+    count_race = n()
+  )
+# Display results of code below this codeblock
+shootings_race_known
+```
+```{r}
+#Find incidents where black women were shot
+black_women_shot <- fatal_police_shootings %>% 
+  filter(race=="B" & gender == "female") %>% 
+  summarise(
+    count_black_women_shot = n()
+  )
+black_women_shout_count<- 69
+black_women_shot
+```
+
+```{r}
+#total for number of cases where race was known
+shootings_race_total <- fatal_police_shootings %>% 
+  filter(!is.na(race)) %>% 
+  summarise(
+    count_races_known = n()
+  )
+shootings_race_total
+#percentage of black women compared to all cases where race was known
+black_women_comp_all_races<-69/7135*100
+#black women compared to female population
+black_female_pop_perc<- 22972431/168914934*100
+```
+```{r}
+#black women shot compared to all women shot and killed
+blk_women_shot_perc <- black_women_shot_count/women_shot_count
+#find the total of all cases where someone shot was unarmed
+total_unarmed_shot <- fatal_police_shooting_data %>% 
+  filter(armed_with == "unarmed") %>% 
+  summarise(
+    count_unarmed_shot = n()
+  )
+unarmed_shot_count <- 466
+total_unarmed_shot
+#black women shot compared to all unarmed who were shot
+blk_women_comp_unarmed<- black_women_shot_count/unarmed_shot_count

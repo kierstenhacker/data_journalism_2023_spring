@@ -1,44 +1,55 @@
 ---
-title: "reverse_engineering_project"
-output: html_document
-date: "2023-03-04"
+title: "Reverse Engineering Project"
+author: "Student names here"
+date: "4-1-2023"
+output:
+  html_document:
+    theme: cerulean
+    highlight: pygments
+    toc: true
+    toc_float:
+      collapsed: true
+      smooth_scroll: false
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-## R Markdown
+## Introduction 
 
-This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+In this notebook, we are reverse engineering the story, "Nearly 250 women have been
+fatally shot by police since 2015" https://www.washingtonpost.com/graphics/2020/investigations/police-shootings-women/
 
-When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+## Load libraries
 
-```{r cars}
-summary(cars)
-```
+Loading required libraries for this analysis.
 
-## Including Plots
-
-You can also embed plots, for example:
-
-```{r pressure, echo=FALSE}
-plot(pressure)
-```
-
-Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
-
-```{r}
+```{r echo=FALSE, message=FALSE}
 library(tidyverse)
 library(lubridate)
 library(refinr)
 library(janitor)
 ```
+
+## Load and Cleaning Data
+
+In this section, describe the source of the data, write a basic data dictionary for data you are working with, and discuss any caveats or issues you discovered working with this data. 
+
+**When working with this data, we realized that it has been updated since 2015, so it includes more values than the original data used in the article published in The Washington Post. Because of this, some of the results do not match exactly with the original analysis results from the piece.**
 ```{r}
 # Read in the data
 fatal_police_shootings<- read_csv("data/fatal_police_shootings_data.csv")
+glimpse(fatal_police_shootings)
 ```
-**The code below will work to answer the analysis posed in this sentence from the Washington Post article about fatal police shootings of women since 2015. "About 31 percent, or 77, of the 247 women fatally shot by police since 2015 had mental health issues, compared to 22 percent of the 5,362 men killed."**
+
+## Sentences to Engineer
+In this notebook, we are reverse engineering five sentences from the story.
+
+### Sentence 1
+
+* **Sentence text**: "About 31 percent, or 77, of the 247 women fatally shot by police since 2015 had mental health issues, compared to 22 percent of the 5,362 men killed."
+* **Analysis summary**: Our findings match at a similar rate with the numbers from the original sentence. However, because our data is updated to include more values after 2015, our numbers for the number of mentally ill women shot were higher and the percentage of mentally ill women shot out of total women shot was also higher. For men, the total number of shot was higher, but the percentage of men who had mental health issues that were fatally shot was lower.
 
 ```{r}
 # Find total number of women shot since 2015
@@ -55,14 +66,13 @@ women_mental_illness <- fatal_police_shootings %>%
    summarise (
     count = n()
   )
-   
 ```
 
 ```{r}
 # Find the percentage of women with mental illness shot
 women_mental_illness_pct <- women_mental_illness %>%
   mutate(
-    pct_mentally_ill = women_mental_illness/women_shot*100
+    pct_mentally_ill = women_mental_illness/women_shot_count*100
   )
 ```
 
@@ -92,7 +102,10 @@ men_mental_illness_pct <- men_mental_illness %>%
   )
 ```
 
-**The code below will work to answer the analysis posed in this sentence from the Washington Post article about fatal police shootings of women since 2015. "Twenty of the 247 women were killed in that kind of situation, analysis shows. In 12 of those 20 shootings, police said the women killed were caught in crossfire or shot accidentally."**
+### Sentence 2
+
+* **Sentence text**: "Twenty of the 247 women were killed in that kind of situation, analysis shows. In 12 of those 20 shootings, police said the women killed were caught in crossfire or shot accidentally."
+* **Analysis summary**: Again, because our data is updated, our analysis found that there were 35 unarmed women who were fatally shot by police. Of those 35 unarmed women killed, we found that 20 of them were killed by accident or "caught in the crossfire." So, we were unable to verify the numbers from the sentence published, but our anaylsis yielded similar results given the new datapoints added.
 
 ```{r}
 #Find the total number of women shot
@@ -120,7 +133,11 @@ women_shot %>%
       count_accident = n()
     )
 ```
-**The code below will work to answer the analysis posed in this sentence from the Washington Post article about fatal police shootings of women since 2015. "Since 2015, police have killed 26 unarmed women, including Taylor. Of those, 14 were White, seven were Black, four were Hispanic and one’s race was unknown. While about twice as many White women were shot and killed as Black women, White women account for five times the Black female population."**
+
+### Sentence 3
+
+* **Sentence text**: "Since 2015, police have killed 26 unarmed women, including Taylor. Of those, 14 were White, seven were Black, four were Hispanic and one’s race was unknown. While about twice as many White women were shot and killed as Black women, White women account for five times the Black female population."
+* **Analysis summary**: Our analysis found 35 unarmed women were killed. Of those, 17 were white, 8 were Black, 8 were Hispanic and 2 yielded an NA. When checking with today's population numbers, our analysis found that white women make up about 5.57 times the the Black female population, which is similar to the rate in the article. 
 
 ```{r}
 #Count the number of unarmed women by race who were shot 
@@ -151,8 +168,10 @@ women_shot %>%
 128037520/22972431
 ```
 
-**Sentence text**: "Since 2015, Black women have accounted for less than 1 percent of the overall fatal shootings in cases where race was known. But within this small subset, Black women, who are 13 percent of the female population, account for 20 percent of the women shot and killed and 28 percent of the unarmed deaths."
-**Analysis summary**: We were able to confirm that black women account for less than 1 percent of overall cases where race was known. We were also able to verify that black women are about 13.6% of the female population. However, they only account for about 18% of women shot and killed. Additionally, black women only 14% of unarmed deaths, which is about half of what the story stated.
+### Sentence 4
+
+* **Sentence text**: "Since 2015, Black women have accounted for less than 1 percent of the overall fatal shootings in cases where race was known. But within this small subset, Black women, who are 13 percent of the female population, account for 20 percent of the women shot and killed and 28 percent of the unarmed deaths."
+* **Analysis summary**: We were able to confirm that black women account for less than 1 percent of overall cases where race was known. We were also able to verify that black women are about 13.6% of the female population. However, they only account for about 18% of women shot and killed. Additionally, black women only 14% of unarmed deaths, which is about half of what the story stated.
 
 ```{r}
 # Find all cases where race was known
@@ -202,3 +221,5 @@ unarmed_shot_count <- 466
 total_unarmed_shot
 #black women shot compared to all unarmed who were shot
 blk_women_comp_unarmed<- black_women_shot_count/unarmed_shot_count
+
+

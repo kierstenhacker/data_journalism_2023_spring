@@ -171,7 +171,7 @@ women_shot %>%
 ### Sentence 4
 
 * **Sentence text**: "Since 2015, Black women have accounted for less than 1 percent of the overall fatal shootings in cases where race was known. But within this small subset, Black women, who are 13 percent of the female population, account for 20 percent of the women shot and killed and 28 percent of the unarmed deaths."
-* **Analysis summary**: We were able to confirm that black women account for less than 1 percent of overall cases where race was known. We were also able to verify that black women are about 13.6% of the female population. However, they only account for about 18% of women shot and killed. Additionally, black women only 14% of unarmed deaths, which is about half of what the story stated.
+* **Analysis summary**: We were able to confirm that black women account for less than 1 percent of overall cases where race was known. We were also able to verify that black women are about 13.6% of the female population. However, they only account for about 18% of women shot and killed. Additionally, black women account for only 14% of unarmed deaths, which is about half of what the story stated.
 
 ```{r}
 # Find all cases where race was known
@@ -210,9 +210,9 @@ black_female_pop_perc<- 22972431/168914934*100
 ```
 ```{r}
 #black women shot compared to all women shot and killed
-blk_women_shot_perc <- black_women_shot_count/women_shot_count
+blk_women_shot_perc <- black_women_shot/women_shot_count
 #find the total of all cases where someone shot was unarmed
-total_unarmed_shot <- fatal_police_shooting_data %>% 
+total_unarmed_shot <- fatal_police_shootings %>% 
   filter(armed_with == "unarmed") %>% 
   summarise(
     count_unarmed_shot = n()
@@ -220,6 +220,23 @@ total_unarmed_shot <- fatal_police_shooting_data %>%
 unarmed_shot_count <- 466
 total_unarmed_shot
 #black women shot compared to all unarmed who were shot
-blk_women_comp_unarmed<- black_women_shot_count/unarmed_shot_count
+blk_women_comp_unarmed<- black_women_shot/unarmed_shot_count
+```
+### Sentence 5
+
+* **Sentence text**: “The starkest difference between women and men is the rate: Women account for about half the population, but 4 percent of the killings. Of those fatally shot every year, about 44 have been women.”
+* **Analysis summary**:  
+
+```{r}
+women_shot_count/8269*100
+
+total_perc_women_shot <- 4.42617
+
+fatal_police_shootings %>%
+  filter(gender == "female")%>%
+  group_by(year)
+  
+```
 
 
+```{r}

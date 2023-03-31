@@ -232,9 +232,12 @@ women_shot_count/8269*100
 
 total_perc_women_shot <- 4.42617
 
-fatal_police_shootings %>%
-  filter(gender == "female")%>%
-  group_by(year)
+fatal_police_shootings_years <- fatal_police_shootings %>% 
+  mutate(year = year (date, label = TRUE))
+
+dates <- as.POSIXct(date, format = "%m/%d/%Y %H:%M:%S")
+format(dates, format="%Y")
+
   
 ```
 

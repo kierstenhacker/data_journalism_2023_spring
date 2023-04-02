@@ -1,7 +1,7 @@
 ---
 title: "Reverse Engineering Project"
-author: "Student names here"
-date: "4-1-2023"
+author: "Kiersten Hacker and Sherwin-Nestor Esguerra"
+date: "4-2-2023"
 output:
   html_document:
     theme: cerulean
@@ -210,7 +210,7 @@ black_female_pop_perc<- 22972431/168914934*100
 ```
 ```{r}
 #black women shot compared to all women shot and killed
-blk_women_shot_perc <- black_women_shot/women_shot_count
+blk_women_shot_perc <- black_women_shot/women_shot_count*100
 #find the total of all cases where someone shot was unarmed
 total_unarmed_shot <- fatal_police_shootings %>% 
   filter(armed_with == "unarmed") %>% 
@@ -220,12 +220,12 @@ total_unarmed_shot <- fatal_police_shootings %>%
 unarmed_shot_count <- 466
 total_unarmed_shot
 #black women shot compared to all unarmed who were shot
-blk_women_comp_unarmed<- black_women_shot/unarmed_shot_count
+blk_women_comp_unarmed<- black_women_shot/unarmed_shot_count*100
 ```
 ### Sentence 5
 
 * **Sentence text**: “The starkest difference between women and men is the rate: Women account for about half the population, but 4 percent of the killings. Of those fatally shot every year, about 44 have been women.”
-* **Analysis summary**:  
+* **Analysis summary**: We were able to confirm that since 2015 there have been about 44 women fatally shot by police every year. The years 2018 and 2021 could be outliers since there were 52 and 56 women shot. So far for 2023 there were only six women fatally shot, but the whole years has not been recorded yet. From our analysis, we found that women made up 4.4% of the killings which is similar to the story's finding. Again, since our data is updated, this could cause the discrepency.  
 
 ```{r}
 women_shot_count/8269*100
@@ -233,12 +233,14 @@ women_shot_count/8269*100
 total_perc_women_shot <- 4.42617
 
 fatal_police_shootings_years <- fatal_police_shootings %>% 
-  mutate(year = year (date, label = TRUE))
+  mutate(year = year(date))
 
-dates <- as.POSIXct(date, format = "%m/%d/%Y %H:%M:%S")
-format(dates, format="%Y")
-
-  
+fatal_police_shootings_years %>%
+  filter(gender == "female") %>%
+  group_by (year) %>%
+  summarise (
+    count_id = n()
+  )
 ```
 
 

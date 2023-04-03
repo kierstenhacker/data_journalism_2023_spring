@@ -1,6 +1,6 @@
 ---
 title: "Reverse Engineering Project"
-author: "Kiersten Hacker and Sherwin-Nestor Esguerra"
+author: "Kiersten Hacker and Sherwin Esguerra"
 date: "4-2-2023"
 output:
   html_document:
@@ -36,7 +36,7 @@ library(janitor)
 
 In this section, describe the source of the data, write a basic data dictionary for data you are working with, and discuss any caveats or issues you discovered working with this data. 
 
-**When working with this data, we realized that it has been updated since 2015, so it includes more values than the original data used in the article published in The Washington Post. Because of this, some of the results do not match exactly with the original analysis results from the piece.**
+**The data came from The Washington Post's database to track fatal police shootings since 2015 that the organization built through different reporting methods. The data came from local news sources, law enforcement websites and other open databases in addition to other data-gathering techniques. This notebook contains different data frames that have broken down the data into totals and percentages of killings based on race, gender and whether the shooting victim was armed or had mental health issues. There are other values from the analysis saved as we worked to display different outcomes to verify the numbers presented in the original article. When working with this data, we realized that it has been updated since 2015, so it includes more values than the original data used in the article published in The Washington Post. Because of this, some of the results do not match exactly with the original analysis results from the piece.**
 ```{r}
 # Read in the data
 fatal_police_shootings<- read_csv("data/fatal_police_shootings_data.csv")
@@ -49,7 +49,7 @@ In this notebook, we are reverse engineering five sentences from the story.
 ### Sentence 1
 
 * **Sentence text**: "About 31 percent, or 77, of the 247 women fatally shot by police since 2015 had mental health issues, compared to 22 percent of the 5,362 men killed."
-* **Analysis summary**: Our findings match at a similar rate with the numbers from the original sentence. However, because our data is updated to include more values after 2015, our numbers for the number of mentally ill women shot were higher and the percentage of mentally ill women shot out of total women shot was also higher. For men, the total number of shot was higher, but the percentage of men who had mental health issues that were fatally shot was lower.
+* **Analysis summary**: Our findings match at a similar rate with the numbers from the original sentence. However, because our data is updated to include more values after 2015, our numbers for the number of mentally ill women shot were higher and the percentage of mentally ill women shot out of total women shot was also higher. For men, the total number of individuals who were shot was higher, but the percentage of men who had mental health issues that were fatally shot was lower than the value in the original piece.
 
 ```{r}
 # Find total number of women shot since 2015
@@ -105,7 +105,7 @@ men_mental_illness_pct <- men_mental_illness %>%
 ### Sentence 2
 
 * **Sentence text**: "Twenty of the 247 women were killed in that kind of situation, analysis shows. In 12 of those 20 shootings, police said the women killed were caught in crossfire or shot accidentally."
-* **Analysis summary**: Again, because our data is updated, our analysis found that there were 35 unarmed women who were fatally shot by police. Of those 35 unarmed women killed, we found that 20 of them were killed by accident or "caught in the crossfire." So, we were unable to verify the numbers from the sentence published, but our anaylsis yielded similar results given the new datapoints added.
+* **Analysis summary**: Again, because our data is updated, our analysis found that there were 35 unarmed women who were fatally shot by police. Of those 35 unarmed women killed, we found that 20 of them were killed by accident or "caught in the crossfire." So, we were unable to verify the numbers from the sentence published, but our analysis returned similar results given the new data points added.
 
 ```{r}
 #Find the total number of women shot
@@ -171,7 +171,7 @@ women_shot %>%
 ### Sentence 4
 
 * **Sentence text**: "Since 2015, Black women have accounted for less than 1 percent of the overall fatal shootings in cases where race was known. But within this small subset, Black women, who are 13 percent of the female population, account for 20 percent of the women shot and killed and 28 percent of the unarmed deaths."
-* **Analysis summary**: We were able to confirm that black women account for less than 1 percent of overall cases where race was known. We were also able to verify that black women are about 13.6% of the female population. However, they only account for about 18% of women shot and killed. Additionally, black women account for only 14% of unarmed deaths, which is about half of what the story stated.
+* **Analysis summary**: We were able to confirm that black women account for less than 1 percent of overall cases where race was known at 0.967%. We were also able to verify that black women are about 13.6% of the female population. However, they only account for about 18% of women shot and killed. Additionally, black women account for only 14% of unarmed deaths, which is about half of what the story stated.
 
 ```{r}
 # Find all cases where race was known
@@ -225,7 +225,7 @@ blk_women_comp_unarmed<- black_women_shot/unarmed_shot_count*100
 ### Sentence 5
 
 * **Sentence text**: “The starkest difference between women and men is the rate: Women account for about half the population, but 4 percent of the killings. Of those fatally shot every year, about 44 have been women.”
-* **Analysis summary**: We were able to confirm that since 2015 there have been about 44 women fatally shot by police every year. The years 2018 and 2021 could be outliers since there were 52 and 56 women shot. So far for 2023 there were only six women fatally shot, but the whole years has not been recorded yet. From our analysis, we found that women made up 4.4% of the killings which is similar to the story's finding. Again, since our data is updated, this could cause the discrepency.  
+* **Analysis summary**: We were able to confirm that since 2015 there have been about 44 women fatally shot by police every year. The years 2018 and 2021 could be outliers since there were 52 and 56 women shot respectively. So far in 2023 there were only six women fatally shot, but the whole year has not been recorded yet. From our analysis, we found that women made up 4.4% of the killings which is similar to the story's finding. Again, since our data is updated, this could cause the discrepancy.  
 
 ```{r}
 women_shot_count/8269*100

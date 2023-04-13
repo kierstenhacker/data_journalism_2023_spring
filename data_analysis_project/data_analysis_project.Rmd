@@ -1,0 +1,33 @@
+---
+title: "Data Analysis Project"
+names: "Kiersten Hacker and Sherwin-Nestor Esguerra"
+date: "4-11-2023"
+output: html_notebook
+---
+
+This notebook will contain the code needed to execute our data analysis project and answer the questions we would like to ask of the Spotify and YouTube data from Kaggle.
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+### Load the libraries
+```{r}
+library(tidyverse)
+library(lubridate)
+library(janitor)
+```
+
+### Load and clean data
+```{r}
+spotify_youtube <- read_csv("data/Spotify_Youtube.csv") %>%
+clean_names()
+
+glimpse(spotify_youtube)
+```
+
+### Basic exploratory analysis
+** The dataset has 20,718 rows and 28 columns. There are some NA values within the YouTube data which could serve as a limitation. Similarly, within the YouTube description values, some of the descriptions have emojis or other characters and symbols that could be difficult to work with. Another limitation could arise with the values in the instrumentalness column since they include negative exponents which could also be difficult to work with for different analysis calculations. The original source of the data defines the columns well, otherwise we may make them more complicated. Since the data includes artists whose music is on Spotify but probably not every artist in the world, we would not be able to make assumptions about the music industry as a whole. 
+
+
+

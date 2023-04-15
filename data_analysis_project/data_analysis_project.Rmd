@@ -21,13 +21,18 @@ library(janitor)
 ### Load and clean data
 ```{r}
 spotify_youtube <- read_csv("data/Spotify_Youtube.csv") %>%
-clean_names()
+clean_names() %>%
+rename(number = x1) %>%
+  select(-c(number)) %>%
+mutate(duration_secs = duration_ms/1000, duration_mins = duration_ms/60000)
 
 glimpse(spotify_youtube)
+
+
 ```
 
 ### Basic exploratory analysis
-** The dataset has 20,718 rows and 28 columns. There are some NA values within the YouTube data which could serve as a limitation. Similarly, within the YouTube description values, some of the descriptions have emojis or other characters and symbols that could be difficult to work with. Another limitation could arise with the values in the instrumentalness column since they include negative exponents which could also be difficult to work with for different analysis calculations. The original source of the data defines the columns well, otherwise we may make them more complicated. Since the data includes artists whose music is on Spotify but probably not every artist in the world, we would not be able to make assumptions about the music industry as a whole.  
+** The dataset has 20,718 rows and 28 columns. There are some NA values within the YouTube data which could serve as a limitation. Similarly, within the YouTube description values, some of the descriptions have emojis or other characters and symbols that could be difficult to work with. Another limitation could arise with the values in the instrumentalness column since they include negative exponents which could also be difficult to work with for different analysis calculations. The original source of the data defines the columns well, otherwise we may make them more complicated. Since the data includes artists whose music is on Spotify but probably not every artist in the world, we would not be able to make assumptions about the music industry as a whole. Another limitation we can notice is that some of the songs that fall under an artist's most popular songs are feautres of said artist on another song. This can be kind of confusing, but we might be able to work around it using filters once we start more analysis. However, this data is also helpful for answering our question about how collaborations affect an artist's popularity. One code we would need to make note of is 'key,' which denotes pitch notation but we need to find a way to make it easily apparent what the pitch is rather than just seeing a number. 
 
 
 

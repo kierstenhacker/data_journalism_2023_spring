@@ -1762,11 +1762,43 @@ Spotify and YouTube data from Kaggle.</p>
 <h3>Load the libraries</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5saWJyYXJ5KGx1YnJpZGF0ZSlcbmxpYnJhcnkoamFuaXRvcilcbmBgYCJ9 -->
-<pre class="r"><code>library(tidyverse)
-library(lubridate)
-library(janitor)</code></pre>
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeSh0aWR5dmVyc2UpXG5gYGAifQ== -->
+<pre class="r"><code>library(tidyverse)</code></pre>
 <!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiUmVnaXN0ZXJlZCBTMyBtZXRob2RzIG92ZXJ3cml0dGVuIGJ5ICdkYnBseXInOlxuICBtZXRob2QgICAgICAgICBmcm9tXG4gIHByaW50LnRibF9sYXp5ICAgICBcbiAgcHJpbnQudGJsX3NxbCAgICAgIFxu4pSA4pSAIEF0dGFjaGluZyBwYWNrYWdlcyDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIDilIAgdGlkeXZlcnNlIDEuMy4yIOKUgOKUgOKclCBnZ3Bsb3QyIDMuNC4wICAgICDinJQgcHVycnIgICAxLjAuMVxu4pyUIHRpYmJsZSAgMy4xLjggICAgIOKclCBkcGx5ciAgIDEuMS4wXG7inJQgdGlkeXIgICAxLjMuMCAgICAg4pyUIHN0cmluZ3IgMS41LjBcbuKclCByZWFkciAgIDIuMS4zICAgICDinJQgZm9yY2F0cyAxLjAuMOKUgOKUgCBDb25mbGljdHMg4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSA4pSAIHRpZHl2ZXJzZV9jb25mbGljdHMoKSDilIDilIBcbuKcliBkcGx5cjo6ZmlsdGVyKCkgbWFza3Mgc3RhdHM6OmZpbHRlcigpXG7inJYgZHBseXI6OmxhZygpICAgIG1hc2tzIHN0YXRzOjpsYWcoKVxuIn0= -->
+<pre><code>Registered S3 methods overwritten by &#39;dbplyr&#39;:
+  method         from
+  print.tbl_lazy     
+  print.tbl_sql      
+── Attaching packages ───────────────────────────────────────────────────────── tidyverse 1.3.2 ──✔ ggplot2 3.4.0     ✔ purrr   1.0.1
+✔ tibble  3.1.8     ✔ dplyr   1.1.0
+✔ tidyr   1.3.0     ✔ stringr 1.5.0
+✔ readr   2.1.3     ✔ forcats 1.0.0── Conflicts ──────────────────────────────────────────────────────────── tidyverse_conflicts() ──
+✖ dplyr::filter() masks stats::filter()
+✖ dplyr::lag()    masks stats::lag()</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShsdWJyaWRhdGUpXG5gYGAifQ== -->
+<pre class="r"><code>library(lubridate)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYbHVicmlkYXRl4oCZXG5cblRoZSBmb2xsb3dpbmcgb2JqZWN0cyBhcmUgbWFza2VkIGZyb20g4oCYcGFja2FnZTpiYXNl4oCZOlxuXG4gICAgZGF0ZSwgaW50ZXJzZWN0LCBzZXRkaWZmLCB1bmlvblxuIn0= -->
+<pre><code>
+Attaching package: ‘lubridate’
+
+The following objects are masked from ‘package:base’:
+
+    date, intersect, setdiff, union</code></pre>
+<!-- rnb-output-end -->
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxubGlicmFyeShqYW5pdG9yKVxuYGBgIn0= -->
+<pre class="r"><code>library(janitor)</code></pre>
+<!-- rnb-source-end -->
+<!-- rnb-output-begin eyJkYXRhIjoiXG5BdHRhY2hpbmcgcGFja2FnZTog4oCYamFuaXRvcuKAmVxuXG5UaGUgZm9sbG93aW5nIG9iamVjdHMgYXJlIG1hc2tlZCBmcm9tIOKAmHBhY2thZ2U6c3RhdHPigJk6XG5cbiAgICBjaGlzcS50ZXN0LCBmaXNoZXIudGVzdFxuIn0= -->
+<pre><code>
+Attaching package: ‘janitor’
+
+The following objects are masked from ‘package:stats’:
+
+    chisq.test, fisher.test</code></pre>
+<!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
 </div>
@@ -1774,41 +1806,22 @@ library(janitor)</code></pre>
 <h3>Load and clean data</h3>
 <!-- rnb-text-end -->
 <!-- rnb-chunk-begin -->
-<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuZ2xpbXBzZShzcG90aWZ5X3lvdXR1YmUpXG5cbmBgYCJ9 -->
-<pre class="r"><code>glimpse(spotify_youtube)
+<!-- rnb-source-begin eyJkYXRhIjoiYGBgclxuc3BvdGlmeV95b3V0dWJlIDwtIHJlYWRfY3N2KFwiZGF0YS9TcG90aWZ5X1lvdXR1YmUuY3N2XCIpICU+JVxuY2xlYW5fbmFtZXMoKSAlPiVcbnJlbmFtZShudW1iZXIgPSB4MSkgJT4lXG4gIHNlbGVjdCgtYyhudW1iZXIpKSAlPiVcbm11dGF0ZShkdXJhdGlvbl9zZWNzID0gZHVyYXRpb25fbXMvMTAwMCwgZHVyYXRpb25fbWlucyA9IGR1cmF0aW9uX21zLzYwMDAwKVxuXG5gYGAifQ== -->
+<pre class="r"><code>spotify_youtube &lt;- read_csv(&quot;data/Spotify_Youtube.csv&quot;) %&gt;%
+clean_names() %&gt;%
+rename(number = x1) %&gt;%
+  select(-c(number)) %&gt;%
+mutate(duration_secs = duration_ms/1000, duration_mins = duration_ms/60000)
 </code></pre>
 <!-- rnb-source-end -->
-<!-- rnb-output-begin eyJkYXRhIjoiUm93czogMjAsNzE4XG5Db2x1bW5zOiAyOFxuJCB4MSAgICAgICAgICAgICAgIDxkYmw+IDAsIDEsIDIsIDMsIDQsIDUsIDYsIDcsIDgsIDksIDEwLCAxMSwgMTIsIDEzLCAxNCwgMTUsIDE2LCAxNywgMTgsIDE5LCAy4oCmXG4kIGFydGlzdCAgICAgICAgICAgPGNocj4gXCJHb3JpbGxhelwiLCBcIkdvcmlsbGF6XCIsIFwiR29yaWxsYXpcIiwgXCJHb3JpbGxhelwiLCBcIkdvcmlsbGF6XCIsIFwiR29yaWxsYXpcIizigKZcbiQgdXJsX3Nwb3RpZnkgICAgICA8Y2hyPiBcImh0dHBzOi8vb3Blbi5zcG90aWZ5LmNvbS9hcnRpc3QvM0FBMjhLWnZ3QVVjWnVPS3d5YmxKUVwiLCBcImh0dHBzOi8vb3BlbuKAplxuJCB0cmFjayAgICAgICAgICAgIDxjaHI+IFwiRmVlbCBHb29kIEluYy5cIiwgXCJSaGluZXN0b25lIEV5ZXNcIiwgXCJOZXcgR29sZCAoZmVhdC4gVGFtZSBJbXBhbGEgYW5kIELigKZcbiQgYWxidW0gICAgICAgICAgICA8Y2hyPiBcIkRlbW9uIERheXNcIiwgXCJQbGFzdGljIEJlYWNoXCIsIFwiTmV3IEdvbGQgKGZlYXQuIFRhbWUgSW1wYWxhIGFuZCBCb290aWUg4oCmXG4kIGFsYnVtX3R5cGUgICAgICAgPGNocj4gXCJhbGJ1bVwiLCBcImFsYnVtXCIsIFwic2luZ2xlXCIsIFwiYWxidW1cIiwgXCJhbGJ1bVwiLCBcImFsYnVtXCIsIFwic2luZ2xlXCIsIFwiYWxidW3igKZcbiQgdXJpICAgICAgICAgICAgICA8Y2hyPiBcInNwb3RpZnk6dHJhY2s6MGQyOGtoY292NkFpZWdTQ3BHNVR1VFwiLCBcInNwb3RpZnk6dHJhY2s6MWZvTXYySFF3ZlEydm50RuKAplxuJCBkYW5jZWFiaWxpdHkgICAgIDxkYmw+IDAuODE4LCAwLjY3NiwgMC42OTUsIDAuNjg5LCAwLjY2MywgMC43NjAsIDAuNzE2LCAwLjcyNiwgMC43NDEsIDAuNjI1LCAw4oCmXG4kIGVuZXJneSAgICAgICAgICAgPGRibD4gMC43MDUsIDAuNzAzLCAwLjkyMywgMC43MzksIDAuNjk0LCAwLjg5MSwgMC44OTcsIDAuODE1LCAwLjkxMywgMC44NzcsIDDigKZcbiQga2V5ICAgICAgICAgICAgICA8ZGJsPiA2LCA4LCAxLCAyLCAxMCwgMTEsIDQsIDExLCAyLCAxMCwgOSwgNCwgOSwgMCwgMCwgMTEsIDAsIDAsIDcsIDUsIDYsIDExLOKAplxuJCBsb3VkbmVzcyAgICAgICAgIDxkYmw+IC02LjY3OSwgLTUuODE1LCAtMy45MzAsIC01LjgxMCwgLTguNjI3LCAtNS44NTIsIC03LjE4NSwgLTUuODg2LCAtMy4zNDAs4oCmXG4kIHNwZWVjaGluZXNzICAgICAgPGRibD4gMC4xNzcwLCAwLjAzMDIsIDAuMDUyMiwgMC4wMjYwLCAwLjE3MTAsIDAuMDM3MiwgMC4wNjI5LCAwLjAzMTMsIDAuMDQ2NSzigKZcbiQgYWNvdXN0aWNuZXNzICAgICA8ZGJsPiA4LjM2ZS0wMywgOC42OWUtMDIsIDQuMjVlLTAyLCAxLjUxZS0wNSwgMi41M2UtMDIsIDIuMjllLTAyLCAxLjIwZS0wMiwgN+KAplxuJCBpbnN0cnVtZW50YWxuZXNzIDxkYmw+IDIuMzNlLTAzLCA2Ljg3ZS0wNCwgNC42OWUtMDIsIDUuMDllLTAxLCAwLjAwZSswMCwgOC42OWUtMDIsIDIuNjJlLTAxLCA44oCmXG4kIGxpdmVuZXNzICAgICAgICAgPGRibD4gMC42MTMwLCAwLjA0NjMsIDAuMTE2MCwgMC4wNjQwLCAwLjA2OTgsIDAuMjk4MCwgMC4zMjUwLCAwLjExMjAsIDAuMzI1MCzigKZcbiQgdmFsZW5jZSAgICAgICAgICA8ZGJsPiAwLjc3MiwgMC44NTIsIDAuNTUxLCAwLjU3OCwgMC41MjUsIDAuOTY2LCAwLjM1OCwgMC40NjIsIDAuNjQzLCAwLjg2NSwgMOKAplxuJCB0ZW1wbyAgICAgICAgICAgIDxkYmw+IDEzOC41NTksIDkyLjc2MSwgMTA4LjAxNCwgMTIwLjQyMywgMTY3Ljk1MywgMTIwLjI2NCwgMTI3LjAzMCwgMTQwLjE1OCwg4oCmXG4kIGR1cmF0aW9uX21zICAgICAgPGRibD4gMjIyNjQwLCAyMDAxNzMsIDIxNTE1MCwgMjMzODY3LCAzNDA5MjAsIDI0NTAwMCwgMjc0MTQyLCAyMDk1NjAsIDIxMzc1MCzigKZcbiQgdXJsX3lvdXR1YmUgICAgICA8Y2hyPiBcImh0dHBzOi8vd3d3LnlvdXR1YmUuY29tL3dhdGNoP3Y9SHlITnVWYVpKLWtcIiwgXCJodHRwczovL3d3dy55b3V0dWJlLmNvbeKAplxuJCB0aXRsZSAgICAgICAgICAgIDxjaHI+IFwiR29yaWxsYXogLSBGZWVsIEdvb2QgSW5jLiAoT2ZmaWNpYWwgVmlkZW8pXCIsIFwiR29yaWxsYXogLSBSaGluZXN0b25lIEV54oCmXG4kIGNoYW5uZWwgICAgICAgICAgPGNocj4gXCJHb3JpbGxhelwiLCBcIkdvcmlsbGF6XCIsIFwiR29yaWxsYXpcIiwgXCJHb3JpbGxhelwiLCBcIkdvcmlsbGF6XCIsIFwiR29yaWxsYXpcIizigKZcbiQgdmlld3MgICAgICAgICAgICA8ZGJsPiA2OTM1NTUyMjEsIDcyMDExNjQ1LCA4NDM1MDU1LCAyMTE3NTQ5NTIsIDYxODQ4MDk1OCwgMjU5MDIxMTYxLCA0NTE5OTYsIOKAplxuJCBsaWtlcyAgICAgICAgICAgIDxkYmw+IDYyMjA4OTYsIDEwNzkxMjgsIDI4MjE0MiwgMTc4ODU3NywgNjE5NzMxOCwgMTg0NDY1OCwgMTE2ODYsIDE3Njc1LCA3Mzk14oCmXG4kIGNvbW1lbnRzICAgICAgICAgPGRibD4gMTY5OTA3LCAzMTAwMywgNzM5OSwgNTUyMjksIDE1NTkzMCwgNzIwMDgsIDI0MSwgMjYwLCAyMDI5NiwgMzkyNDAsIDEyMTTigKZcbiQgZGVzY3JpcHRpb24gICAgICA8Y2hyPiBcIk9mZmljaWFsIEhEIFZpZGVvIGZvciBHb3JpbGxheicgZmFudGFzdGljIHRyYWNrIEZlZWwgR29vZCBJbmMuXFxuXFxuRm9sbOKAplxuJCBsaWNlbnNlZCAgICAgICAgIDxsZ2w+IFRSVUUsIFRSVUUsIFRSVUUsIFRSVUUsIFRSVUUsIFRSVUUsIEZBTFNFLCBGQUxTRSwgVFJVRSwgVFJVRSwgVFJVRSwgVFJV4oCmXG4kIG9mZmljaWFsX3ZpZGVvICAgPGxnbD4gVFJVRSwgVFJVRSwgVFJVRSwgVFJVRSwgVFJVRSwgVFJVRSwgVFJVRSwgRkFMU0UsIFRSVUUsIFRSVUUsIFRSVUUsIFRSVUXigKZcbiQgc3RyZWFtICAgICAgICAgICA8ZGJsPiAxMDQwMjM0ODU0LCAzMTAwODM3MzMsIDYzMDYzNDY3LCA0MzQ2NjM1NTksIDYxNzI1OTczOCwgMzIzODUwMzI3LCAxMDY2NuKAplxuIn0= -->
-<pre><code>Rows: 20,718
-Columns: 28
-$ x1               &lt;dbl&gt; 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 2…
-$ artist           &lt;chr&gt; &quot;Gorillaz&quot;, &quot;Gorillaz&quot;, &quot;Gorillaz&quot;, &quot;Gorillaz&quot;, &quot;Gorillaz&quot;, &quot;Gorillaz&quot;,…
-$ url_spotify      &lt;chr&gt; &quot;https://open.spotify.com/artist/3AA28KZvwAUcZuOKwyblJQ&quot;, &quot;https://open…
-$ track            &lt;chr&gt; &quot;Feel Good Inc.&quot;, &quot;Rhinestone Eyes&quot;, &quot;New Gold (feat. Tame Impala and B…
-$ album            &lt;chr&gt; &quot;Demon Days&quot;, &quot;Plastic Beach&quot;, &quot;New Gold (feat. Tame Impala and Bootie …
-$ album_type       &lt;chr&gt; &quot;album&quot;, &quot;album&quot;, &quot;single&quot;, &quot;album&quot;, &quot;album&quot;, &quot;album&quot;, &quot;single&quot;, &quot;album…
-$ uri              &lt;chr&gt; &quot;spotify:track:0d28khcov6AiegSCpG5TuT&quot;, &quot;spotify:track:1foMv2HQwfQ2vntF…
-$ danceability     &lt;dbl&gt; 0.818, 0.676, 0.695, 0.689, 0.663, 0.760, 0.716, 0.726, 0.741, 0.625, 0…
-$ energy           &lt;dbl&gt; 0.705, 0.703, 0.923, 0.739, 0.694, 0.891, 0.897, 0.815, 0.913, 0.877, 0…
-$ key              &lt;dbl&gt; 6, 8, 1, 2, 10, 11, 4, 11, 2, 10, 9, 4, 9, 0, 0, 11, 0, 0, 7, 5, 6, 11,…
-$ loudness         &lt;dbl&gt; -6.679, -5.815, -3.930, -5.810, -8.627, -5.852, -7.185, -5.886, -3.340,…
-$ speechiness      &lt;dbl&gt; 0.1770, 0.0302, 0.0522, 0.0260, 0.1710, 0.0372, 0.0629, 0.0313, 0.0465,…
-$ acousticness     &lt;dbl&gt; 8.36e-03, 8.69e-02, 4.25e-02, 1.51e-05, 2.53e-02, 2.29e-02, 1.20e-02, 7…
-$ instrumentalness &lt;dbl&gt; 2.33e-03, 6.87e-04, 4.69e-02, 5.09e-01, 0.00e+00, 8.69e-02, 2.62e-01, 8…
-$ liveness         &lt;dbl&gt; 0.6130, 0.0463, 0.1160, 0.0640, 0.0698, 0.2980, 0.3250, 0.1120, 0.3250,…
-$ valence          &lt;dbl&gt; 0.772, 0.852, 0.551, 0.578, 0.525, 0.966, 0.358, 0.462, 0.643, 0.865, 0…
-$ tempo            &lt;dbl&gt; 138.559, 92.761, 108.014, 120.423, 167.953, 120.264, 127.030, 140.158, …
-$ duration_ms      &lt;dbl&gt; 222640, 200173, 215150, 233867, 340920, 245000, 274142, 209560, 213750,…
-$ url_youtube      &lt;chr&gt; &quot;https://www.youtube.com/watch?v=HyHNuVaZJ-k&quot;, &quot;https://www.youtube.com…
-$ title            &lt;chr&gt; &quot;Gorillaz - Feel Good Inc. (Official Video)&quot;, &quot;Gorillaz - Rhinestone Ey…
-$ channel          &lt;chr&gt; &quot;Gorillaz&quot;, &quot;Gorillaz&quot;, &quot;Gorillaz&quot;, &quot;Gorillaz&quot;, &quot;Gorillaz&quot;, &quot;Gorillaz&quot;,…
-$ views            &lt;dbl&gt; 693555221, 72011645, 8435055, 211754952, 618480958, 259021161, 451996, …
-$ likes            &lt;dbl&gt; 6220896, 1079128, 282142, 1788577, 6197318, 1844658, 11686, 17675, 7395…
-$ comments         &lt;dbl&gt; 169907, 31003, 7399, 55229, 155930, 72008, 241, 260, 20296, 39240, 1214…
-$ description      &lt;chr&gt; &quot;Official HD Video for Gorillaz&#39; fantastic track Feel Good Inc.\n\nFoll…
-$ licensed         &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, FALSE, TRUE, TRUE, TRUE, TRU…
-$ official_video   &lt;lgl&gt; TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, TRUE, FALSE, TRUE, TRUE, TRUE, TRUE…
-$ stream           &lt;dbl&gt; 1040234854, 310083733, 63063467, 434663559, 617259738, 323850327, 10666…</code></pre>
+<!-- rnb-output-begin eyJkYXRhIjoiTmV3IG5hbWVzOlJvd3M6IDIwNzE4IENvbHVtbnM6IDI44pSA4pSAIENvbHVtbiBzcGVjaWZpY2F0aW9uIOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgOKUgFxuRGVsaW1pdGVyOiBcIixcIlxuY2hyICgxMCk6IEFydGlzdCwgVXJsX3Nwb3RpZnksIFRyYWNrLCBBbGJ1bSwgQWxidW1fdHlwZSwgVXJpLCBVcmxfeW91dHViZSwgVGl0bGUsIENoYW5uZWwsIERlcy4uLlxuZGJsICgxNik6IC4uLjEsIERhbmNlYWJpbGl0eSwgRW5lcmd5LCBLZXksIExvdWRuZXNzLCBTcGVlY2hpbmVzcywgQWNvdXN0aWNuZXNzLCBJbnN0cnVtZW50YWxuZS4uLlxubGdsICAoMik6IExpY2Vuc2VkLCBvZmZpY2lhbF92aWRlb1xu4oS5IFVzZSBgc3BlYygpYCB0byByZXRyaWV2ZSB0aGUgZnVsbCBjb2x1bW4gc3BlY2lmaWNhdGlvbiBmb3IgdGhpcyBkYXRhLlxu4oS5IFNwZWNpZnkgdGhlIGNvbHVtbiB0eXBlcyBvciBzZXQgYHNob3dfY29sX3R5cGVzID0gRkFMU0VgIHRvIHF1aWV0IHRoaXMgbWVzc2FnZS5cbiJ9 -->
+<pre><code>New names:Rows: 20718 Columns: 28── Column specification ──────────────────────────────────────────────────────────────────────────
+Delimiter: &quot;,&quot;
+chr (10): Artist, Url_spotify, Track, Album, Album_type, Uri, Url_youtube, Title, Channel, Des...
+dbl (16): ...1, Danceability, Energy, Key, Loudness, Speechiness, Acousticness, Instrumentalne...
+lgl  (2): Licensed, official_video
+ℹ Use `spec()` to retrieve the full column specification for this data.
+ℹ Specify the column types or set `show_col_types = FALSE` to quiet this message.</code></pre>
 <!-- rnb-output-end -->
 <!-- rnb-chunk-end -->
 <!-- rnb-text-begin -->
@@ -1826,11 +1839,19 @@ calculations. The original source of the data defines the columns well,
 otherwise we may make them more complicated. Since the data includes
 artists whose music is on Spotify but probably not every artist in the
 world, we would not be able to make assumptions about the music industry
-as a whole.</p>
+as a whole. Another limitation we can notice is that some of the songs
+that fall under an artist’s most popular songs are feautres of said
+artist on another song. This can be kind of confusing, but we might be
+able to work around it using filters once we start more analysis.
+However, this data is also helpful for answering our question about how
+collaborations affect an artist’s popularity. One code we would need to
+make note of is ‘key,’ which denotes pitch notation but we need to find
+a way to make it easily apparent what the pitch is rather than just
+seeing a number.</p>
 <!-- rnb-text-end -->
 </div>
 
-<div id="rmd-source-code">LS0tCnRpdGxlOiAiRGF0YSBBbmFseXNpcyBQcm9qZWN0IgpuYW1lczogIktpZXJzdGVuIEhhY2tlciBhbmQgU2hlcndpbi1OZXN0b3IgRXNndWVycmEiCmRhdGU6ICI0LTExLTIwMjMiCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KClRoaXMgbm90ZWJvb2sgd2lsbCBjb250YWluIHRoZSBjb2RlIG5lZWRlZCB0byBleGVjdXRlIG91ciBkYXRhIGFuYWx5c2lzIHByb2plY3QgYW5kIGFuc3dlciB0aGUgcXVlc3Rpb25zIHdlIHdvdWxkIGxpa2UgdG8gYXNrIG9mIHRoZSBTcG90aWZ5IGFuZCBZb3VUdWJlIGRhdGEgZnJvbSBLYWdnbGUuCgpgYGB7ciBzZXR1cCwgaW5jbHVkZT1GQUxTRX0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKQpgYGAKCiMjIyBMb2FkIHRoZSBsaWJyYXJpZXMKYGBge3J9CmxpYnJhcnkodGlkeXZlcnNlKQpsaWJyYXJ5KGx1YnJpZGF0ZSkKbGlicmFyeShqYW5pdG9yKQpgYGAKCiMjIyBMb2FkIGFuZCBjbGVhbiBkYXRhCmBgYHtyfQpzcG90aWZ5X3lvdXR1YmUgPC0gcmVhZF9jc3YoImRhdGEvU3BvdGlmeV9Zb3V0dWJlLmNzdiIpICU+JQpjbGVhbl9uYW1lcygpCgpnbGltcHNlKHNwb3RpZnlfeW91dHViZSkKYGBgCgojIyMgQmFzaWMgZXhwbG9yYXRvcnkgYW5hbHlzaXMKKiogVGhlIGRhdGFzZXQgaGFzIDIwLDcxOCByb3dzIGFuZCAyOCBjb2x1bW5zLiBUaGVyZSBhcmUgc29tZSBOQSB2YWx1ZXMgd2l0aGluIHRoZSBZb3VUdWJlIGRhdGEgd2hpY2ggY291bGQgc2VydmUgYXMgYSBsaW1pdGF0aW9uLiBTaW1pbGFybHksIHdpdGhpbiB0aGUgWW91VHViZSBkZXNjcmlwdGlvbiB2YWx1ZXMsIHNvbWUgb2YgdGhlIGRlc2NyaXB0aW9ucyBoYXZlIGVtb2ppcyBvciBvdGhlciBjaGFyYWN0ZXJzIGFuZCBzeW1ib2xzIHRoYXQgY291bGQgYmUgZGlmZmljdWx0IHRvIHdvcmsgd2l0aC4gQW5vdGhlciBsaW1pdGF0aW9uIGNvdWxkIGFyaXNlIHdpdGggdGhlIHZhbHVlcyBpbiB0aGUgaW5zdHJ1bWVudGFsbmVzcyBjb2x1bW4gc2luY2UgdGhleSBpbmNsdWRlIG5lZ2F0aXZlIGV4cG9uZW50cyB3aGljaCBjb3VsZCBhbHNvIGJlIGRpZmZpY3VsdCB0byB3b3JrIHdpdGggZm9yIGRpZmZlcmVudCBhbmFseXNpcyBjYWxjdWxhdGlvbnMuIFRoZSBvcmlnaW5hbCBzb3VyY2Ugb2YgdGhlIGRhdGEgZGVmaW5lcyB0aGUgY29sdW1ucyB3ZWxsLCBvdGhlcndpc2Ugd2UgbWF5IG1ha2UgdGhlbSBtb3JlIGNvbXBsaWNhdGVkLiBTaW5jZSB0aGUgZGF0YSBpbmNsdWRlcyBhcnRpc3RzIHdob3NlIG11c2ljIGlzIG9uIFNwb3RpZnkgYnV0IHByb2JhYmx5IG5vdCBldmVyeSBhcnRpc3QgaW4gdGhlIHdvcmxkLCB3ZSB3b3VsZCBub3QgYmUgYWJsZSB0byBtYWtlIGFzc3VtcHRpb25zIGFib3V0IHRoZSBtdXNpYyBpbmR1c3RyeSBhcyBhIHdob2xlLiAgCgoKCg==</div>
+<div id="rmd-source-code">LS0tCnRpdGxlOiAiRGF0YSBBbmFseXNpcyBQcm9qZWN0IgpuYW1lczogIktpZXJzdGVuIEhhY2tlciBhbmQgU2hlcndpbi1OZXN0b3IgRXNndWVycmEiCmRhdGU6ICI0LTExLTIwMjMiCm91dHB1dDogaHRtbF9ub3RlYm9vawotLS0KClRoaXMgbm90ZWJvb2sgd2lsbCBjb250YWluIHRoZSBjb2RlIG5lZWRlZCB0byBleGVjdXRlIG91ciBkYXRhIGFuYWx5c2lzIHByb2plY3QgYW5kIGFuc3dlciB0aGUgcXVlc3Rpb25zIHdlIHdvdWxkIGxpa2UgdG8gYXNrIG9mIHRoZSBTcG90aWZ5IGFuZCBZb3VUdWJlIGRhdGEgZnJvbSBLYWdnbGUuCgpgYGB7ciBzZXR1cCwgaW5jbHVkZT1GQUxTRX0Ka25pdHI6Om9wdHNfY2h1bmskc2V0KGVjaG8gPSBUUlVFKQpgYGAKCiMjIyBMb2FkIHRoZSBsaWJyYXJpZXMKYGBge3J9CmxpYnJhcnkodGlkeXZlcnNlKQpsaWJyYXJ5KGx1YnJpZGF0ZSkKbGlicmFyeShqYW5pdG9yKQpgYGAKCiMjIyBMb2FkIGFuZCBjbGVhbiBkYXRhCmBgYHtyfQpzcG90aWZ5X3lvdXR1YmUgPC0gcmVhZF9jc3YoImRhdGEvU3BvdGlmeV9Zb3V0dWJlLmNzdiIpICU+JQpjbGVhbl9uYW1lcygpICU+JQpyZW5hbWUobnVtYmVyID0geDEpICU+JQogIHNlbGVjdCgtYyhudW1iZXIpKSAlPiUKbXV0YXRlKGR1cmF0aW9uX3NlY3MgPSBkdXJhdGlvbl9tcy8xMDAwLCBkdXJhdGlvbl9taW5zID0gZHVyYXRpb25fbXMvNjAwMDApCgpnbGltcHNlKHNwb3RpZnlfeW91dHViZSkKCgpgYGAKCiMjIyBCYXNpYyBleHBsb3JhdG9yeSBhbmFseXNpcwoqKiBUaGUgZGF0YXNldCBoYXMgMjAsNzE4IHJvd3MgYW5kIDI4IGNvbHVtbnMuIFRoZXJlIGFyZSBzb21lIE5BIHZhbHVlcyB3aXRoaW4gdGhlIFlvdVR1YmUgZGF0YSB3aGljaCBjb3VsZCBzZXJ2ZSBhcyBhIGxpbWl0YXRpb24uIFNpbWlsYXJseSwgd2l0aGluIHRoZSBZb3VUdWJlIGRlc2NyaXB0aW9uIHZhbHVlcywgc29tZSBvZiB0aGUgZGVzY3JpcHRpb25zIGhhdmUgZW1vamlzIG9yIG90aGVyIGNoYXJhY3RlcnMgYW5kIHN5bWJvbHMgdGhhdCBjb3VsZCBiZSBkaWZmaWN1bHQgdG8gd29yayB3aXRoLiBBbm90aGVyIGxpbWl0YXRpb24gY291bGQgYXJpc2Ugd2l0aCB0aGUgdmFsdWVzIGluIHRoZSBpbnN0cnVtZW50YWxuZXNzIGNvbHVtbiBzaW5jZSB0aGV5IGluY2x1ZGUgbmVnYXRpdmUgZXhwb25lbnRzIHdoaWNoIGNvdWxkIGFsc28gYmUgZGlmZmljdWx0IHRvIHdvcmsgd2l0aCBmb3IgZGlmZmVyZW50IGFuYWx5c2lzIGNhbGN1bGF0aW9ucy4gVGhlIG9yaWdpbmFsIHNvdXJjZSBvZiB0aGUgZGF0YSBkZWZpbmVzIHRoZSBjb2x1bW5zIHdlbGwsIG90aGVyd2lzZSB3ZSBtYXkgbWFrZSB0aGVtIG1vcmUgY29tcGxpY2F0ZWQuIFNpbmNlIHRoZSBkYXRhIGluY2x1ZGVzIGFydGlzdHMgd2hvc2UgbXVzaWMgaXMgb24gU3BvdGlmeSBidXQgcHJvYmFibHkgbm90IGV2ZXJ5IGFydGlzdCBpbiB0aGUgd29ybGQsIHdlIHdvdWxkIG5vdCBiZSBhYmxlIHRvIG1ha2UgYXNzdW1wdGlvbnMgYWJvdXQgdGhlIG11c2ljIGluZHVzdHJ5IGFzIGEgd2hvbGUuIEFub3RoZXIgbGltaXRhdGlvbiB3ZSBjYW4gbm90aWNlIGlzIHRoYXQgc29tZSBvZiB0aGUgc29uZ3MgdGhhdCBmYWxsIHVuZGVyIGFuIGFydGlzdCdzIG1vc3QgcG9wdWxhciBzb25ncyBhcmUgZmVhdXRyZXMgb2Ygc2FpZCBhcnRpc3Qgb24gYW5vdGhlciBzb25nLiBUaGlzIGNhbiBiZSBraW5kIG9mIGNvbmZ1c2luZywgYnV0IHdlIG1pZ2h0IGJlIGFibGUgdG8gd29yayBhcm91bmQgaXQgdXNpbmcgZmlsdGVycyBvbmNlIHdlIHN0YXJ0IG1vcmUgYW5hbHlzaXMuIEhvd2V2ZXIsIHRoaXMgZGF0YSBpcyBhbHNvIGhlbHBmdWwgZm9yIGFuc3dlcmluZyBvdXIgcXVlc3Rpb24gYWJvdXQgaG93IGNvbGxhYm9yYXRpb25zIGFmZmVjdCBhbiBhcnRpc3QncyBwb3B1bGFyaXR5LiBPbmUgY29kZSB3ZSB3b3VsZCBuZWVkIHRvIG1ha2Ugbm90ZSBvZiBpcyAna2V5LCcgd2hpY2ggZGVub3RlcyBwaXRjaCBub3RhdGlvbiBidXQgd2UgbmVlZCB0byBmaW5kIGEgd2F5IHRvIG1ha2UgaXQgZWFzaWx5IGFwcGFyZW50IHdoYXQgdGhlIHBpdGNoIGlzIHJhdGhlciB0aGFuIGp1c3Qgc2VlaW5nIGEgbnVtYmVyLiAKCgoK</div>
 
 
 

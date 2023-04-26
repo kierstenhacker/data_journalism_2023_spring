@@ -34,5 +34,69 @@ glimpse(spotify_youtube)
 ### Basic exploratory analysis
 ** The dataset has 20,718 rows and 28 columns. There are some NA values within the YouTube data which could serve as a limitation. Similarly, within the YouTube description values, some of the descriptions have emojis or other characters and symbols that could be difficult to work with. Another limitation could arise with the values in the instrumentalness column since they include negative exponents which could also be difficult to work with for different analysis calculations. The original source of the data defines the columns well, otherwise we may make them more complicated. Since the data includes artists whose music is on Spotify but probably not every artist in the world, we would not be able to make assumptions about the music industry as a whole. Another limitation we can notice is that some of the songs that fall under an artist's most popular songs are feautres of said artist on another song. This can be kind of confusing, but we might be able to work around it using filters once we start more analysis. However, this data is also helpful for answering our question about how collaborations affect an artist's popularity. One code we would need to make note of is 'key,' which denotes pitch notation but we need to find a way to make it easily apparent what the pitch is rather than just seeing a number. 
 
+Question 1: Which attributes, such as danceability, energy, loudness, etc., tend to have a correlation with the most streamed songs?
+
+Analysis: After using code to select the variables we wanted to work with, we found the correlation coefficient for each song attribute in relation to the number of streams for each song. After finding the correlation coefficients, we calculated the mean among the coefficients for each attribute to average it out. After that, we looked for the maximum value among all the means, and found that danceability and streams had the highest positive correlation coefficient of about 0.073. There were some previous errors due to some values being NA, but using the filter for complete cases got rid of them, and the data we did use was so large that it provided a general idea of which attribute had the greatest correlation to number of streams.
+
+```{r}
+attribute_correlate_stream <- spotify_youtube %>% 
+  select(danceability, energy, key, loudness, speechiness, acousticness, instrumentalness, liveness, valence, tempo, stream) %>% 
+  filter(complete.cases(.)) %>%
+## find the correlation coefficient between each attribute and number of spotify streams 
+   mutate(
+    dance_cor = cor(danceability, stream),
+    energy_cor = cor(energy, stream),
+    key_cor = cor(key, stream),
+    speech_cor = cor(speechiness, stream),
+    acoustic_cor = cor(acousticness, stream),
+    instrumental_cor = cor(instrumentalness, stream),
+    live_cor = cor(liveness, stream),
+    valence_cor = cor(valence, stream),
+    tempo_cor = cor(tempo, stream)
+  ) %>% 
+## find the mean correlation coefficient for each attribute
+  summarise(
+    mean_dance_cor = mean(dance_cor),
+    mean_energy_cor = mean(energy_cor),
+    mean_key_cor = mean(key_cor),
+    mean_speech_cor = mean(speech_cor),
+    mean_acoustic_cor = mean(acoustic_cor),
+    mean_instrumental_cor = mean(instrumental_cor),
+    mean_live_cor = mean(live_cor),
+    mean_valence_cor = mean(valence_cor),
+    mean_tempo_cor = mean(tempo_cor)
+  )
+##output the highest value among the mean coefficients
+max_value <- apply(attribute_correlate_stream, 1, max)
+  
+```
+
+Question 2: Does higher engagement on YouTube videos lead to more streams of the song from the video on Spotify? Is there a relationship that exists between social engagement and streams?
+
+Analysis: In order to find and map out the correlation between Youtube video views and Spotify streams, we first grouped the data by artist and then summarised the data by the sum of views and sum of streams for each artist. After that, we plotted the data into a scatter plot with a line of best fit, which shows that there is a slight positive correlation between number of views on Youtube and number of streams on Spotify. This means that it can be generally true that as one value increases, so does the other. While doing this, we divided the totals by 1,000,000 because the numbers would have been to large to easily grasp. 
+
+```{r}
+##code to find the total number of views and streams (divided by 1,000,000 because numbers were too large to work with)
+streams_views <- spotify_youtube %>% 
+  select(artist, track, stream, views) %>% 
+  mutate(difference = abs(stream-views)) %>% 
+  group_by(artist) %>% 
+  summarise(
+    total_views = sum(views)/1000000,
+    total_streams = sum(stream)/1000000,
+  )
+##create a scatterplot with line of best fit
+streams_views %>% 
+  ggplot(aes(x=total_streams, y=total_views))+
+  geom_point(size=2)+
+  theme_minimal()+
+  geom_smooth(method = "lm")+
+  labs(
+    title = "Correlation between an artist's Spotify Streams and Youtube Views",
+    x = "Number of Streams on Spotify",
+    y = "Number of Views on Youtube"
+  )
+```
+
 
 

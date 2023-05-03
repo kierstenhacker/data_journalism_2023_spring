@@ -97,6 +97,8 @@ streams_views %>%
     x = "Number of Streams on Spotify",
     y = "Number of Views on Youtube"
   )
+
+##what was happening when that wasn't the case, who was successful on spotify and then not youtube
 ```
 
 Question 3: How many videos with a high number of streams are coming from licensed content?
@@ -118,10 +120,18 @@ youtube_high_views %>%
   filter(licensed == FALSE) 
 
 youtube_high_views %>%
-  group_by(channel) %>%
-  filter(licensed == FALSE, official_video == TRUE)
+  group_by(channel, licensed) %>%
+  summarize(total_views = sum(views)) %>% 
+  pivot_wider(names_from = licensed, values_from = total_views)
 
-##how to get totals for licensed and unlicensed?
+youtube_high_views %>%
+  group_by(channel, official_video) %>%
+  summarize(total_views = sum(views)) %>% 
+  pivot_wider(names_from = official_video, values_from = total_views) %>% 
+  filter(`FALSE` > 0)
+
+##how to get totals for licensed and unlicensed? play around with view numbers
+##group by licensed column and then used pivot wider, take the values and make total columns for each 
 ```
 
 Question 4: How do collaborations or features on a song affect its popularity on Spotify and Youtube? What are the most popular collaborations?
@@ -137,6 +147,7 @@ song_features %>%
   arrange(desc(stream))
 
 ##How to count how many features an artist has, issue of repeats where the same song is listed under more than one artist (Mackelmore and Ryan Lewis)
-
+##are mackelmore collaborations more popular than just himself, try to see who collaboraters are for at least one artist
+##average views for artists by themselves and then artist views with their collaborative work, filter for featured and then filter for not featured
 ```
 

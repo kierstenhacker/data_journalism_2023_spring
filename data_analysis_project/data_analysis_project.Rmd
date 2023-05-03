@@ -146,6 +146,24 @@ song_features %>%
   group_by(artist, stream) %>%
   arrange(desc(stream))
 
+spotify_youtube %>%
+  group_by(artist) %>%
+  filter(str_detect(track, 'feat.')) %>%
+  arrange(desc(stream))
+
+spotify_youtube %>%
+  group_by(artist) %>%
+  filter(!str_detect(track,'feat.')) %>%
+  arrange(desc(stream))
+
+spotify_youtube %>%
+  group_by(artist) %>%
+  summarize(total_stream = sum(stream)) %>% 
+  pivot_wider(names_from = track, values_from = total_stream) %>%
+  filter(str_detect(track,'feat.'))
+  
+
+
 ##How to count how many features an artist has, issue of repeats where the same song is listed under more than one artist (Mackelmore and Ryan Lewis)
 ##are mackelmore collaborations more popular than just himself, try to see who collaboraters are for at least one artist
 ##average views for artists by themselves and then artist views with their collaborative work, filter for featured and then filter for not featured

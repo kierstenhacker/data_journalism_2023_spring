@@ -1,0 +1,98 @@
+---
+title: "lab_12"
+author: "Kiersten Hacker"
+date: "2023-05-04"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## You will need
+
+* tidytext and our usual libraries
+
+## Load libraries and establish settings
+
+**Task** Create a codeblock and load appropriate packages and settings for this lab.
+```{r}
+library(tidyverse)
+library(tidytext)
+library(janitor)
+library(lubridate)
+library(rvest)
+```
+
+
+## Questions
+
+**Q1.** You've been assigned to report a story about the leading reasons that Maryland attorneys get sanctioned by the state for misconduct. The state [publishes lists of sanctions](https://www.courts.state.md.us/attygrievance/sanctions) that contain a short text description about the situation. Load the CSV file in the data folder containing records from fiscal year 2011 onwards. Make a list of unique words from the text column, then following the example in the pre_lab, remove common "stop words" from that list and create a list of the top 10 words containing the percentage of occurrences each word represents. What's the leading word in that answer and, broadly, what do you think the top 10 words describe?
+
+**A1. From my analysis, trust was the leading word in the top 10. Although my results could be skewed if I did not use the proper stop words. Trust could also have a number of meanings, whether it is breaking the trust of a client and other officials or a trust involving money and other legal obligations. I think the top 10 words that my code returned mostly describe the punishments attorneys have received for their wrongdoings, such as reprimands, suspension and  disbarrment. Some of the rest of the words allude to the possible violations committed and who experienced or reviewed them. I inlcuded failing and failed in my stop words because if a lawyer is being sanctioned that means that they have had to fail in some way. So I was thinking that by removing failed and failing I would be able to get closer to the roots of the actual wrongdoings to see which offenses are more common.** 
+
+```{r}
+sanctions <- read_csv("data/md_attorney_sanctions.csv")
+
+unique_words <- sanctions %>% select(text) %>%
+  unnest_tokens(word, text)
+View(unique_words)
+
+unique_words %>%
+  count(word, sort = TRUE) %>%
+  top_n(25) %>%
+  mutate(word = reorder(word, n)) 
+
+data("stop_words")
+
+stop_words <- stop_words %>%
+  add_row(word = 'failing') %>% 
+  add_row(word = "attorney") %>% 
+  add_row(word = "conduct") %>% 
+  add_row(word = "respondent") %>%
+  add_row(word = "client") %>%
+  add_row(word = "clients") %>%
+  add_row(word = "conduct") %>%
+  add_row(word = "account") %>%
+  add_row(word = "failed") %>%
+  add_row(word = "engaging") 
+
+unique_words %>%
+  anti_join(stop_words) %>%
+  group_by(word) %>%
+  tally(sort=TRUE) %>%
+  mutate(percent = (n/sum(n))*100) %>%
+  top_n(10)
+```
+
+**Q2.** Let's move beyond single words to phrases. Make a list of the top 10 three-word phrases, called trigrams, based on the example from the pre_lab (you'll need to modify the example code to do this). What's the top trigram and how often does it appear? What does that phrase mean in legal terms?
+
+**A2."Dishonesty fraud deciet" was the top trigram above "involving dishonesty fraud" which is similar. The top trigram was used 155 times or 3.98% of the time while "involving dishonesty fraud" was used 153 times or 3.93% of the time. Together, since they are similar, these two trigrams were used 308 times. According to the American Bar Association, for a lawyer to "engage in conduct involving dishonesty, fraud, deceit or misrepresentation" is professional misconduct. "Involving dishonesty fraud" just seems to be the first part in the wording used to describe engaging in conduct involving dishonesty, fraud, deceit or misrepresentation in the sanction documents on the website. This rule against misconduct is meant to maintain integrity for lawyers. The meaning of this trigram seems pretty strightforward, as dishonesty and misrepresentation would be the act of lying or spinning the truth while fraud and deceit would be the act of deception or falsehoods.  ** 
+
+```{r}
+sanctions %>%
+  unnest_tokens(trigram, text, token = "ngrams", n = 3) %>%
+  separate(trigram, c("word1", "word2", "word3"), sep = " ") %>%
+  filter(!word1 %in% stop_words$word) %>%
+  filter(!word2 %in% stop_words$word) %>%
+  filter(!word3 %in% stop_words$word) %>%
+  mutate(trigram = paste(word1, word2, word3, sep=" ")) %>%
+  group_by(trigram) %>%
+  tally(sort=TRUE) %>%
+  mutate(percent = (n/sum(n))*100) %>%
+  top_n(10)
+```
+
+**Q3.** Let's drop back down to more traditional text analysis - take the top trigram from Q2 and write code to see how many times it occurs in the text column in each fiscal year. What do you think the answer produced by your code suggests? What else could you do to try and clarify the most important reasons attorneys get sanctioned?
+
+**A3.The answer produced by my code suggests that in recent years there have been a significantly higher number of sanctions that mention dishonesty, fraud and deceit. Between 2019 and 2022, the number of sanctions involving this trigram more than doubled since 2017, the fifth highest with 11 mentions. This suggests that this type of misconduct is on the rise and perhaps it is one of the more common types of violations for lawyers who are exercising malpractice. Or maybe this data suggests that now more lawyers are being caught or more actions are being reported than in the past. To try and clarify the most important reasons attorneys get sanctioned, we could look into more trigrams or strings of phrases that come from the list of misconduct rules from the ABA and filter to see how many times they appear. Maybe this could look like creating a dataframe that defines the total amount of times each of those trigrams is used every year. For example, collecting unreasonable fees and client's informed consent were common trigrams that appeared, so if we look into what these may mean and find that they are reasons to be sanctioned, we could compare their use to see which sanction is most important. Another thing I thought about was the sentences or punishments received for the actions committed by the attorneys. Perhaps an easier way to see the most important reasons attorneys receive sanctions is to look through all the types of punishments and see which phrases tend to match with longer suspensions, etc. This way we could see which offenses are most serious and therefore important. I am not sure what else would work best, but these were some of the initial thoughts that came to mind.** 
+
+```{r}
+sanctions %>%
+  filter(str_detect(text, "dishonesty, fraud, deceit")) %>%
+  group_by(fiscal_year) %>%
+  summarise (
+    count = n()
+  ) %>%
+  arrange (desc(count))
+```

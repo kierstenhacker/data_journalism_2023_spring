@@ -16,6 +16,8 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse)
 library(lubridate)
 library(janitor)
+library(tidytext)
+library(rvest)
 ```
 
 ### Load and clean data
@@ -167,5 +169,64 @@ spotify_youtube %>%
 ##How to count how many features an artist has, issue of repeats where the same song is listed under more than one artist (Mackelmore and Ryan Lewis)
 ##are mackelmore collaborations more popular than just himself, try to see who collaboraters are for at least one artist
 ##average views for artists by themselves and then artist views with their collaborative work, filter for featured and then filter for not featured
+```
+
+
+```{r}
+spotify_youtube_text <- spotify_youtube %>%
+  mutate(text = description)
+
+unique_words <- spotify_youtube_text %>% select(text) %>%
+  unnest_tokens(word, text)
+
+unique_words %>%
+  count(word, sort = TRUE) %>%
+  top_n(25) %>%
+  mutate(word = reorder(word, n)) 
+
+```
+Do singles or songs from full albums get more streams? What about views on YouTube? Which artists have more success with singles compared to full albums and vice versa?
+
+```{r}
+spotify_youtube %>%
+  filter(album_type == "single") %>%
+  arrange(desc(stream))
+ 
+spotify_youtube %>%
+  filter(album_type == "album") %>%
+  arrange(desc(stream)) 
+
+spotify_youtube %>%
+  filter(album_type == "single") %>%
+  group_by(artist) %>%
+  summarise (
+    count_track = n()
+  ) %>%
+  arrange(desc(count_track))
+
+spotify_youtube %>%
+  filter(album_type == "album") %>%
+  group_by(artist) %>%
+  summarise (
+    count_track = n()
+  ) %>%
+  arrange(desc(count_track))
+
+
+youtube_high_views %>%
+filter(album_type == "single") %>%
+  group_by(artist) %>%
+  summarise (
+    count_title = n()
+  ) %>%
+  arrange(desc(count_title))
+
+youtube_high_views %>%
+filter(album_type == "album") %>%
+  group_by(artist) %>%
+  summarise (
+    count_title = n()
+  ) %>%
+  arrange(desc(count_title))
 ```
 

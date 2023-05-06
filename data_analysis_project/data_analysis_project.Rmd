@@ -29,17 +29,16 @@ rename(number = x1) %>%
 mutate(duration_secs = duration_ms/1000, duration_mins = duration_ms/60000)
 
 glimpse(spotify_youtube)
-
-
 ```
 
 ### Basic exploratory analysis
 ** The dataset has 20,718 rows and 28 columns. There are some NA values within the YouTube data which could serve as a limitation. Similarly, within the YouTube description values, some of the descriptions have emojis or other characters and symbols that could be difficult to work with. Another limitation could arise with the values in the instrumentalness column since they include negative exponents which could also be difficult to work with for different analysis calculations. The original source of the data defines the columns well, otherwise we may make them more complicated. Since the data includes artists whose music is on Spotify but probably not every artist in the world, we would not be able to make assumptions about the music industry as a whole. Another limitation we can notice is that some of the songs that fall under an artist's most popular songs are feautres of said artist on another song. This can be kind of confusing, but we might be able to work around it using filters once we start more analysis. However, this data is also helpful for answering our question about how collaborations affect an artist's popularity. One code we would need to make note of is 'key,' which denotes pitch notation but we need to find a way to make it easily apparent what the pitch is rather than just seeing a number. There could also be issues with repeat songs when songs are on more than one album, although sometimes it will be the same song but a slightly different rendition.
 
 ##Questions
-Question 1: Which attributes, such as danceability, energy, loudness, etc., tend to have a correlation with the most streamed songs?
 
-Analysis: After using code to select the variables we wanted to work with, we found the correlation coefficient for each song attribute in relation to the number of streams for each song. After finding the correlation coefficients, we calculated the mean among the coefficients for each attribute to average it out. After that, we looked for the maximum value among all the means, and found that danceability and streams had the highest positive correlation coefficient of about 0.073. There were some previous errors due to some values being NA, but using the filter for complete cases got rid of them, and the data we did use was so large that it provided a general idea of which attribute had the greatest correlation to number of streams.
+**Question 1: Which attributes, such as danceability, energy, loudness, etc., tend to have a correlation with the most streamed songs?**
+
+**Analysis**: After using code to select the variables we wanted to work with, we found the correlation coefficient for each song attribute in relation to the number of streams for each song. After finding the correlation coefficients, we calculated the mean among the coefficients for each attribute to average it out. After that, we looked for the maximum value among all the means, and found that danceability and streams had the highest positive correlation coefficient of about 0.073. There were some previous errors due to some values being NA, but using the filter for complete cases got rid of them, and the data we did use was so large that it provided a general idea of which attribute had the greatest correlation to number of streams.
 
 ```{r}
 attribute_correlate_stream <- spotify_youtube %>% 
@@ -74,9 +73,9 @@ max_value <- apply(attribute_correlate_stream, 1, max)
   
 ```
 
-Question 2: Does higher engagement on YouTube videos lead to more streams of the song from the video on Spotify? Is there a relationship that exists between social engagement and streams?
+**Question 2: Does higher engagement on YouTube videos lead to more streams of the song from the video on Spotify? Is there a relationship that exists between social engagement and streams?**
 
-Analysis: In order to find and map out the correlation between Youtube video views and Spotify streams, we first grouped the data by artist and then summarised the data by the sum of views and sum of streams for each artist. After that, we plotted the data into a scatter plot with a line of best fit, which shows that there is a slight positive correlation between number of views on Youtube and number of streams on Spotify. This means that it can be generally true that as one value increases, so does the other. While doing this, we divided the totals by 1,000,000 because the numbers would have been to large to easily grasp. 
+**Analysis**: In order to find and map out the correlation between Youtube video views and Spotify streams, we first grouped the data by artist and then summarised the data by the sum of views and sum of streams for each artist. After that, we plotted the data into a scatter plot with a line of best fit, which shows that there is a slight positive correlation between number of views on Youtube and number of streams on Spotify. This means that it can be generally true that as one value increases, so does the other. While doing this, we divided the totals by 1,000,000 because the numbers would have been to large to easily grasp. 
 
 ```{r}
 ##code to find the total number of views and streams (divided by 1,000,000 because numbers were too large to work with)
@@ -100,50 +99,51 @@ streams_views %>%
     y = "Number of Views on Youtube"
   )
 
-##what was happening when that wasn't the case, who was successful on spotify and then not youtube
+##Notes for more investigation
+  ##what was happening when that wasn't the case, who was successful on spotify and then not youtube
 ```
 
-Question 3: How many videos with a high number of streams are coming from licensed content?
+**Question 3: How many videos with a high number of streams are coming from licensed content?**
 
-Analysis: 
+**Analysis**: Most videos on YouTube with views over 500 million are coming from licensed content. However, we found that there are some outliers. About 54 videos were unlicensed and 15 channels posted unlicensed videos that were also classified as the official video for the track. Some channels say they are official, like Major Lazer Official, and then they only have unlicensed content on the platform. There is no one consistent theme or trend between the channels that have posted unlicensed content, though it seems like some of them are from countries outside of the U.S. or rappers and DJs. Redbox also posted unlicensed videos, which is interesting coming from a company even though it is not as popular anymore. It seems like some channels are definitely repurposing content from an unverified user, like WORLDSTARHIPHOP or perhaps other content is remixes or live performances in the case of DJs. In doing pivot wider, we can filter for licensed and unlicensed content as well as official videos and view the total number of views for each sorted by channel.
 
 ```{r}
+##filter to create a new dataframe with YouTube videos that have over 500 million views
 youtube_high_views <- spotify_youtube %>%
   filter(views > 500000000)
-
+##trying to count how many licensed videos artists have
 youtube_high_views %>%
   group_by(artist) %>%
   summarise (
     count_licensed = n()
   ) %>%
   arrange(desc(count_licensed))
-
+##filter for videos that are not licensed
 youtube_high_views %>%
   filter(licensed == FALSE) 
-
+##finding the amount of views for videos that are licensed and unlicensed and grouping it by channel
 youtube_high_views %>%
   group_by(channel, licensed) %>%
   summarize(total_views = sum(views)) %>% 
   pivot_wider(names_from = licensed, values_from = total_views)
-
+##finding the number of views for videos that are unlicensed but it is the official video and grouping it by channel 
 youtube_high_views %>%
   group_by(channel, official_video) %>%
   summarize(total_views = sum(views)) %>% 
   pivot_wider(names_from = official_video, values_from = total_views) %>% 
   filter(`FALSE` > 0)
-
-##how to get totals for licensed and unlicensed? play around with view numbers
-##group by licensed column and then used pivot wider, take the values and make total columns for each 
 ```
 
-Question 4: How do collaborations or features on a song affect its popularity on Spotify and Youtube? What are the most popular collaborations?
+**Question 4: How do collaborations or features on a song affect its popularity on Spotify and YouTube? What are the most popular collaborations?**
 
-Analysis:
+**Analysis**: Some artists definitely seem to be more successful with their songs that have collaborators on the track compared to songs where they are the sole artist. We were trying to do a similar analysis to the question above using pivot_wider to compare the number of streams for songs with a collaborator and without so we could see which artists would be best to collaborate with if you want your song to reach the most people. We ran into an error trying to use pivot wider in the end, so we will definitely need to brainstorm more solutions that will move us past this dead end before we complete more analysis. Either way, Post Malone is the only artist who had streams in the top 10 for both a single song and a collaboration. Mackelmore and Ryan Lewis were also in the top 10 highest number of streams for their collaborative songs, but fall behind for single songs. Also, we noticed a complication with the data when doing an analysis like this to answer the question because songs will appear twice under the different artists' names even though it is the same song. This can be seen especially with Mackelmore and Ryan Lewis since the song appears under Mackelmore, Ryan Lewis and Mackelmore and Ryan Lewis. Industry Baby and Levitating also appear twice, once under each artist's name, throwing off the top 10 most streamed collaborative songs.
 
 ```{r}
+##filtering to create a new dataframe that only includes songs that have one or more artists featured on the track including the main artist
 song_features <- spotify_youtube %>%
   filter(str_detect(track, 'feat.'))
 
+##sorting through the dataframe to find the artist who has the highest number of streams with a collaborator on their track
 song_features %>%
   group_by(artist, stream) %>%
   arrange(desc(stream))
@@ -152,25 +152,25 @@ spotify_youtube %>%
   group_by(artist) %>%
   filter(str_detect(track, 'feat.')) %>%
   arrange(desc(stream))
-
+##filtering for tracks where there are no collaborators and grouping it by artist in the order of highest streams to lowest
 spotify_youtube %>%
   group_by(artist) %>%
   filter(!str_detect(track,'feat.')) %>%
   arrange(desc(stream))
-
+##attempting to use pivot_wider to compare the amount of streams for tracks with collaborators and tracks without.
 spotify_youtube %>%
   group_by(artist) %>%
   summarize(total_stream = sum(stream)) %>% 
   pivot_wider(names_from = track, values_from = total_stream) %>%
   filter(str_detect(track,'feat.'))
   
-
-
-##How to count how many features an artist has, issue of repeats where the same song is listed under more than one artist (Mackelmore and Ryan Lewis)
-##are mackelmore collaborations more popular than just himself, try to see who collaboraters are for at least one artist
-##average views for artists by themselves and then artist views with their collaborative work, filter for featured and then filter for not featured
+##Notes for more investigation:
+  ##How to count how many features an artist has, issue of repeats where the same song is listed under more than one artist (Mackelmore and Ryan Lewis)
+  ##Try to see who collaboraters are for at least one artist who is more successful with someone else on their work
+  ##Find the average views for artists by themselves and then artist views with their collaborative work, filter for featured and then filter for not featured
 ```
 
+##I played around with unique words for the descriptions of YouTube videos but then decided to ditch my efforts because they weren't really that relevant to any major newsworthy findings.
 
 ```{r}
 spotify_youtube_text <- spotify_youtube %>%
@@ -185,17 +185,20 @@ unique_words %>%
   mutate(word = reorder(word, n)) 
 
 ```
-Do singles or songs from full albums get more streams? What about views on YouTube? Which artists have more success with singles compared to full albums and vice versa?
+**Question 5: Do singles or songs from full albums get more streams? What about views on YouTube? Which artists have more success with singles compared to full albums and vice versa?**
+
+**Analysis**: More well known American artists were in the top 10 highest views for YouTube videos coming from songs that were part of a full album. A lot of the singles were also songs that had collaborations between artists. None of the artists who had the top number of streams for singles also had the top number of streams for songs on a full album. Perhaps collaborative songs also perform better when they are a single rather than featured in an album. The highest number of streams for a song that came from an album was The Weeknd's "Blinding Lights" which had about a billion more streams than Halsey's "Closer" which is the top single with the most amount of streams. The top videos with the highest views for singles and regular album tracks were also much different than the results from the Spotify streams in these categories. What this could tell us is that maybe jsut because a song is popular does not mean the video to go with it will be as well. There are deeper visual aspects and social trends that may contribute more to the number of views on YouTube. 
 
 ```{r}
+##filtering for singles and arranging them from highest number of streams to lowest
 spotify_youtube %>%
   filter(album_type == "single") %>%
   arrange(desc(stream))
- 
+##filtering for tracks from full albums and arranging them from highest number of streams to lowest 
 spotify_youtube %>%
   filter(album_type == "album") %>%
   arrange(desc(stream)) 
-
+##counting the number of singles and full album tracks each artist has
 spotify_youtube %>%
   filter(album_type == "single") %>%
   group_by(artist) %>%
@@ -212,7 +215,7 @@ spotify_youtube %>%
   ) %>%
   arrange(desc(count_track))
 
-
+##counting the number of single videos and album track videos an artist has
 youtube_high_views %>%
 filter(album_type == "single") %>%
   group_by(artist) %>%
@@ -228,5 +231,17 @@ filter(album_type == "album") %>%
     count_title = n()
   ) %>%
   arrange(desc(count_title))
-```
+##arrange to see which videos have the highest number of views for singles and tracks from an album
+youtube_high_views %>%
+filter(album_type == "single") %>%
+  group_by(artist) %>%
+  arrange(desc(views))
 
+youtube_high_views %>%
+filter(album_type == "album") %>%
+  group_by(artist) %>%
+  arrange(desc(views))
+
+```
+**Our most newsworthy finding**
+So far, we think our most newsworthy piece of analysis comes from either the licensed and unlicensed content on YouTube or the analysis of artist collaborations. We think that once we are able to complete more analysis on artist collaborations, it would make for a really interesting article about who to feature on your track if you want your song to amass a lot of streams on Spotify. From what we have seen, there have not been any articles with a central focus along the lines of "Here's who to make songs with if you want them to take off," which we think could be an impactful finding in and around the music community. Also, with the consumption of video on the rise between TikTok and YouTube, we think it is newsworthy to question why certain channels have unlicensed content or how their videos can be official but unlicensed. As we learn more about how to navigate social media spaces in terms of regulating content and copyright, perhaps these findings can provide more insight for those who make social media rules or who work for the social media companies and are trying to limit unlicensed content. 

@@ -137,17 +137,12 @@ youtube_high_views %>%
 ```{r}
 ##visualize views from licensed vs. unlicensed videos
  high_views_licensing %>%
-  filter(!is.na(`TRUE`)) 
+  filter(!is.na(`TRUE`)) %>% nrow
 
 high_views_licensing %>%
-  filter(!is.na(`FALSE`))
-  
-high_views_licensing_totals <- high_views_licensing %>%
-  mutate(total_licensed = 320, total_unlicensed = 30)
-    
-    
-  ggplot() +
-  geom_bar(aes(x=County, weight=TOTAL_DIFF))
+  filter(!is.na(`FALSE`)) %>% nrow
+
+
 ```
 
 **Question 4: How do collaborations or features on a song affect its popularity on Spotify and YouTube? What are the most popular collaborations?**

@@ -128,21 +128,48 @@ high_views_licensing <- youtube_high_views %>%
   pivot_wider(names_from = licensed, values_from = total_views)
 
 ##finding the number of views for videos that are unlicensed but it is the official video and grouping it by channel 
-youtube_high_views %>%
+high_views_official <- youtube_high_views %>%
   group_by(channel, official_video) %>%
   summarize(total_views = sum(views)) %>% 
   pivot_wider(names_from = official_video, values_from = total_views) %>% 
   filter(`FALSE` > 0)
 ```
 ```{r}
-##visualize views from licensed vs. unlicensed videos
- high_views_licensing %>%
+##total the licensed and unlicensed videos
+licensed <- high_views_licensing %>%
   filter(!is.na(`TRUE`)) %>% nrow
 
-high_views_licensing %>%
-  filter(!is.na(`FALSE`)) %>% nrow
+unlicensed <- high_views_licensing %>%
+  filter(!is.na(`FALSE`)) %>% nrow ()
 
+results <-
+  data.frame(type=c("licensed", "unlicensed"), number=c(licensed, unlicensed))
 
+##visualize the licensed and unlicensed videos
+results %>%
+  ggplot() +
+  geom_bar(aes(x= reorder(type,number), weight=number)) +
+    coord_flip() +
+    theme_minimal() +
+  labs(
+    title="Licensed Music Videos With High Views Outpace Unlicensed on YouTube ",
+    x = "Type of content",
+    y = "Total channels",
+    caption = "source: Spotify and YouTube data from Kaggle"
+  )
+
+##visualize the number of views for unlicensed official videos 
+high_views_official %>%
+  ggplot() +
+  geom_bar(aes(x=reorder(channel,`FALSE`), weight=`FALSE`)) +
+  coord_flip() +
+  theme_minimal() +
+  labs(
+    title="Some Unlicensed Official Videos Amass Billions of Views on YouTube",
+    x = "Channels",
+    y = "Total views",
+    caption = "source: Spotify and YouTube data from Kaggle"
+  )
 ```
 
 **Question 4: How do collaborations or features on a song affect its popularity on Spotify and YouTube? What are the most popular collaborations?**
@@ -180,6 +207,10 @@ spotify_youtube %>%
   ##Try to see who collaboraters are for at least one artist who is more successful with someone else on their work
   ##Find the average views for artists by themselves and then artist views with their collaborative work, filter for featured and then filter for not featured
 ```
+```{r}
+##visualize top 10 collaborative songs
+```
+
 
 ##I played around with unique words for the descriptions of YouTube videos but then decided to ditch my efforts because they weren't really that relevant to any major newsworthy findings.
 

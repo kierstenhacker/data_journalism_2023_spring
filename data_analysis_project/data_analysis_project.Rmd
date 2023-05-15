@@ -18,6 +18,7 @@ library(lubridate)
 library(janitor)
 library(tidytext)
 library(rvest)
+library(scales)
 ```
 
 ### Load and clean data
@@ -135,6 +136,8 @@ high_views_official <- youtube_high_views %>%
   filter(`FALSE` > 0)
 ```
 ```{r}
+options(scipen = 10000)
+
 ##total the licensed and unlicensed videos
 licensed <- high_views_licensing %>%
   filter(!is.na(`TRUE`)) %>% nrow
@@ -197,10 +200,11 @@ spotify_youtube %>%
   
 ##attempting to use pivot_wider to compare the amount of streams for tracks with collaborators and tracks without.
 spotify_youtube %>%
+  filter(str_detect(track,'feat.')) %>% 
   group_by(artist) %>%
   summarize(total_stream = sum(stream)) %>% 
-  pivot_wider(names_from = track, values_from = total_stream) %>%
-  filter(str_detect(track,'feat.'))
+  pivot_wider(names_from = track, values_from = total_stream) 
+  
   
 ##Notes for more investigation:
   ##How to count how many features an artist has, issue of repeats where the same song is listed under more than one artist (Mackelmore and Ryan Lewis)
@@ -256,6 +260,10 @@ spotify_youtube %>%
 spotify_youtube %>%
   filter(artist == "Camila Cabello", str_detect(track, 'feat.')) %>%
   arrange(desc(stream))
+
+##describe in one sentence what the collection of 10 songs represents, spot check
+##check everage streams for solo and collab to compare for a small list of artists to see who actually does well
+##how would you restructure the data to make it actually useful
 ```
 
 

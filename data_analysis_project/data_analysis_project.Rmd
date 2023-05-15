@@ -45,7 +45,7 @@ glimpse(spotify_youtube)
 attribute_correlate_stream <- spotify_youtube %>% 
   select(danceability, energy, key, loudness, speechiness, acousticness, instrumentalness, liveness, valence, tempo, stream) %>% 
   filter(complete.cases(.)) %>%
-## find the correlation coefficient between each attribute and number of spotify streams 
+##Find the correlation coefficient between each attribute and number of spotify streams 
    mutate(
     dance_cor = cor(danceability, stream),
     energy_cor = cor(energy, stream),
@@ -57,7 +57,7 @@ attribute_correlate_stream <- spotify_youtube %>%
     valence_cor = cor(valence, stream),
     tempo_cor = cor(tempo, stream)
   ) %>% 
-## find the mean correlation coefficient for each attribute
+##Find the mean correlation coefficient for each attribute
   summarise(
     mean_dance_cor = mean(dance_cor),
     mean_energy_cor = mean(energy_cor),
@@ -69,7 +69,7 @@ attribute_correlate_stream <- spotify_youtube %>%
     mean_valence_cor = mean(valence_cor),
     mean_tempo_cor = mean(tempo_cor)
   )
-##output the highest value among the mean coefficients
+##Output the highest value among the mean coefficients
 max_value <- apply(attribute_correlate_stream, 1, max)
   
 ```
@@ -79,7 +79,7 @@ max_value <- apply(attribute_correlate_stream, 1, max)
 **Analysis**: In order to find and map out the correlation between Youtube video views and Spotify streams, we first grouped the data by artist and then summarised the data by the sum of views and sum of streams for each artist. After that, we plotted the data into a scatter plot with a line of best fit, which shows that there is a slight positive correlation between number of views on Youtube and number of streams on Spotify. This means that it can be generally true that as one value increases, so does the other. While doing this, we divided the totals by 1,000,000 because the numbers would have been to large to easily grasp. 
 
 ```{r}
-##code to find the total number of views and streams (divided by 1,000,000 because numbers were too large to work with)
+##Code to find the total number of views and streams (divided by 1,000,000 because numbers were too large to work with)
 streams_views <- spotify_youtube %>% 
   select(artist, track, stream, views) %>% 
   mutate(difference = abs(stream-views)) %>% 
@@ -88,7 +88,7 @@ streams_views <- spotify_youtube %>%
     total_views = sum(views)/1000000,
     total_streams = sum(stream)/1000000,
   )
-##create a scatterplot with line of best fit
+##Create a scatterplot with line of best fit
 streams_views %>% 
   ggplot(aes(x=total_streams, y=total_views))+
   geom_point(size=2)+
@@ -100,8 +100,11 @@ streams_views %>%
     y = "Number of Views on Youtube"
   )
 
-##Notes for more investigation
-  ##what was happening when that wasn't the case, who was successful on spotify and then not youtube
+##What was happening when that positive relationship wasn't the case, who was successful on Spotify and then not YouTube
+spotify_youtube %>%
+  filter(stream > 10000, views < 5000) %>%
+  group_by(artist) %>%
+  arrange(desc(stream))
 ```
 
 **Question 3: How many videos with a high number of streams are coming from licensed content?**
@@ -109,26 +112,26 @@ streams_views %>%
 **Analysis**: Most videos on YouTube with views over 500 million are coming from licensed content. However, we found that there are some outliers. About 54 videos were unlicensed and 15 channels posted unlicensed videos that were also classified as the official video for the track. Some channels say they are official, like Major Lazer Official, and then they only have unlicensed content on the platform. There is no one consistent theme or trend between the channels that have posted unlicensed content, though it seems like some of them are from countries outside of the U.S. or rappers and DJs. Redbox also posted unlicensed videos, which is interesting coming from a company even though it is not as popular anymore. It seems like some channels are definitely repurposing content from an unverified user, like WORLDSTARHIPHOP or perhaps other content is remixes or live performances in the case of DJs. In doing pivot wider, we can filter for licensed and unlicensed content as well as official videos and view the total number of views for each sorted by channel.
 
 ```{r}
-##filter to create a new dataframe with YouTube videos that have over 500 million views
+##Filter to create a new dataframe with YouTube videos that have over 500 million views
 youtube_high_views <- spotify_youtube %>%
   filter(views > 500000000)
-##trying to count how many licensed videos artists have
+##Trying to count how many licensed videos artists have
 youtube_high_views %>%
   group_by(artist) %>%
   summarise (
     count_licensed = n()
   ) %>%
   arrange(desc(count_licensed))
-##filter for videos that are not licensed
+##Filter for videos that are not licensed
 youtube_high_views %>%
   filter(licensed == FALSE) 
-##finding the amount of views for videos that are licensed and unlicensed and grouping it by channel
+##Finding the amount of views for videos that are licensed and unlicensed and grouping it by channel
 high_views_licensing <- youtube_high_views %>%
   group_by(channel, licensed) %>%
   summarize(total_views = sum(views)) %>% 
   pivot_wider(names_from = licensed, values_from = total_views)
 
-##finding the number of views for videos that are unlicensed but it is the official video and grouping it by channel 
+##Finding the number of views for videos that are unlicensed but it is the official video and grouping it by channel 
 high_views_official <- youtube_high_views %>%
   group_by(channel, official_video) %>%
   summarize(total_views = sum(views)) %>% 
@@ -138,7 +141,7 @@ high_views_official <- youtube_high_views %>%
 ```{r}
 options(scipen = 10000)
 
-##total the licensed and unlicensed videos
+##Total the licensed and unlicensed videos with views above 500 million
 licensed <- high_views_licensing %>%
   filter(!is.na(`TRUE`)) %>% nrow
 
@@ -148,19 +151,19 @@ unlicensed <- high_views_licensing %>%
 results <-
   data.frame(type=c("licensed", "unlicensed"), number=c(licensed, unlicensed))
 
-##visualize the licensed and unlicensed videos
+##Visualize the licensed and unlicensed videos
 results %>%
   ggplot() +
   geom_bar(aes(x=type, weight=number)) +
     theme_minimal() +
   labs(
     title="Licensed Music Videos With High Views Outpace Unlicensed on YouTube ",
-    x = "Total channels",
-    y = "Type of content",
+    x = "Type of content",
+    y = "Total channels",
     caption = "source: Spotify and YouTube data from Kaggle"
   )
 
-##visualize the number of views for unlicensed official videos 
+##Visualize the number of views for unlicensed official videos 
 high_views_official %>%
   ggplot() +
   geom_bar(aes(x=reorder(channel,`FALSE`), weight=`FALSE`)) +
@@ -198,18 +201,18 @@ spotify_youtube %>%
   filter(!str_detect(track,'feat.')) %>%
   arrange(desc(stream))
   
-##attempting to use pivot_wider to compare the amount of streams for tracks with collaborators and tracks without.
+##Attempting to use pivot_wider to compare the amount of streams for tracks with collaborators and tracks without. It returns each song as a column, making it difficult to read.
 spotify_youtube %>%
-  filter(str_detect(track,'feat.')) %>% 
-  group_by(artist) %>%
+  group_by(track) %>%
   summarize(total_stream = sum(stream)) %>% 
-  pivot_wider(names_from = track, values_from = total_stream) 
-  
+  pivot_wider(names_from = track, values_from = total_stream)
+
   
 ##Notes for more investigation:
   ##How to count how many features an artist has, issue of repeats where the same song is listed under more than one artist (Mackelmore and Ryan Lewis)
   ##Try to see who collaboraters are for at least one artist who is more successful with someone else on their work
   ##Find the average views for artists by themselves and then artist views with their collaborative work, filter for featured and then filter for not featured
+
 ```
 ```{r}
 ##Visualize top collaborative and single songs
@@ -228,7 +231,6 @@ top_10_alone <- spotify_youtube %>%
   head(10)
 
 ##Create bar charts
-
 top_10_collab %>%
   ggplot() +
   geom_bar(aes(x=reorder(artist, stream), weight=stream)) +
@@ -261,9 +263,26 @@ spotify_youtube %>%
   filter(artist == "Camila Cabello", str_detect(track, 'feat.')) %>%
   arrange(desc(stream))
 
+##Finding average streams for artists by themselves and with collaborators to see the benefits
+collab_average_streams <- spotify_youtube %>%
+  filter(artist == "Camila Cabello" | artist == "Lil Nas X" | artist == "Post Malone" | artist == "Dua Lipa" | artist == "Ed Sheeran" | artist == "Drake", str_detect(track,'feat.')) %>%
+ group_by(artist) %>%
+  summarise(
+    mean_stream = mean(stream)
+  )
+
+non_collab_average_streams <- spotify_youtube %>%
+  filter(artist == "Camila Cabello" | artist == "Lil Nas X" | artist == "Post Malone" | artist == "Dua Lipa" | artist == "Ed Sheeran" | artist == "Drake") %>%
+ group_by(artist) %>%
+  summarise(
+    mean_stream = mean(stream)
+  )
+
+
 ##describe in one sentence what the collection of 10 songs represents, spot check
-##check everage streams for solo and collab to compare for a small list of artists to see who actually does well
+##check average streams for solo and collab to compare for a small list of artists to see who actually does well
 ##how would you restructure the data to make it actually useful
+##are some of the views and streams low because the songs had jsut come out when the data was collected?
 ```
 
 

@@ -148,13 +148,12 @@ results <-
 ##visualize the licensed and unlicensed videos
 results %>%
   ggplot() +
-  geom_bar(aes(x= reorder(type,number), weight=number)) +
-    coord_flip() +
+  geom_bar(aes(x=type, weight=number)) +
     theme_minimal() +
   labs(
     title="Licensed Music Videos With High Views Outpace Unlicensed on YouTube ",
-    x = "Type of content",
-    y = "Total channels",
+    x = "Total channels",
+    y = "Type of content",
     caption = "source: Spotify and YouTube data from Kaggle"
   )
 
@@ -195,6 +194,7 @@ spotify_youtube %>%
   group_by(artist) %>%
   filter(!str_detect(track,'feat.')) %>%
   arrange(desc(stream))
+  
 ##attempting to use pivot_wider to compare the amount of streams for tracks with collaborators and tracks without.
 spotify_youtube %>%
   group_by(artist) %>%
@@ -208,7 +208,54 @@ spotify_youtube %>%
   ##Find the average views for artists by themselves and then artist views with their collaborative work, filter for featured and then filter for not featured
 ```
 ```{r}
-##visualize top 10 collaborative songs
+##Visualize top collaborative and single songs
+
+##New dataframes for the top 10 
+top_10_collab <- spotify_youtube %>%
+  group_by(artist) %>%
+  filter(str_detect(track, 'feat.')) %>%
+  arrange(desc(stream)) %>%
+  head(10)
+   
+top_10_alone <- spotify_youtube %>%
+  group_by(artist) %>%
+  filter(!str_detect(track,'feat.')) %>%
+  arrange(desc(stream)) %>%
+  head(10)
+
+##Create bar charts
+
+top_10_collab %>%
+  ggplot() +
+  geom_bar(aes(x=reorder(artist, stream), weight=stream)) +
+  coord_flip() +
+    theme_minimal()
+
+top_10_alone %>%
+  ggplot() +
+  geom_bar(aes(x=reorder(artist, stream), weight=stream)) +
+  coord_flip() +
+    theme_minimal()
+
+```
+
+```{r}
+##Looking at artists' success in streams by themselves and with collaborators
+spotify_youtube %>%
+  filter(artist == "Macklemore & Ryan Lewis") %>%
+  arrange(desc(stream))
+
+spotify_youtube %>%
+  filter(artist == "Macklemore") %>%
+  arrange(desc(stream))
+
+spotify_youtube %>%
+  filter(artist == "Camila Cabello") %>%
+  arrange(desc(stream))
+
+spotify_youtube %>%
+  filter(artist == "Camila Cabello", str_detect(track, 'feat.')) %>%
+  arrange(desc(stream))
 ```
 
 
@@ -287,3 +334,4 @@ filter(album_type == "album") %>%
 ```
 **Our most newsworthy finding**
 So far, we think our most newsworthy piece of analysis comes from either the licensed and unlicensed content on YouTube or the analysis of artist collaborations. We think that once we are able to complete more analysis on artist collaborations, it would make for a really interesting article about who to feature on your track if you want your song to amass a lot of streams on Spotify. From what we have seen, there have not been any articles with a central focus along the lines of "Here's who to make songs with if you want them to take off," which we think could be an impactful finding in and around the music community. Also, with the consumption of video on the rise between TikTok and YouTube, we think it is newsworthy to question why certain channels have unlicensed content or how their videos can be official but unlicensed. As we learn more about how to navigate social media spaces in terms of regulating content and copyright, perhaps these findings can provide more insight for those who make social media rules or who work for the social media companies and are trying to limit unlicensed content. 
+**There are only 10 songs for each artist that show up every time analysis is done**

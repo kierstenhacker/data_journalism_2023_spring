@@ -39,14 +39,16 @@ glimpse(spotify_youtube)
 
 **Question 1: Which attributes, such as danceability, energy, loudness, etc., tend to have a correlation with the most streamed songs?**
 
-**Analysis**: After using code to select the variables we wanted to work with, we found the correlation coefficient for each song attribute in relation to the number of streams for each song. After finding the correlation coefficients, we calculated the mean among the coefficients for each attribute to average it out. After that, we looked for the maximum value among all the means, and found that danceability and streams had the highest positive correlation coefficient of about 0.073. There were some previous errors due to some values being NA, but using the filter for complete cases got rid of them, and the data we did use was so large that it provided a general idea of which attribute had the greatest correlation to number of streams.
+**Analysis**: After using code to select the variables we wanted to work with, we found the correlation coefficient for each song attribute in relation to the number of streams for each song. After finding the correlation coefficients, we calculated the mean among the coefficients for each attribute to average it out. After that, we looked for the maximum value among all the means, and found that danceability and streams had the highest positive correlation coefficient of about 0.073. There were some previous errors due to some values being NA, but using the filter for complete cases got rid of them, and the data we did use was so large that it provided a general idea of which attribute had the greatest correlation to number of streams. Previously, we analyzed the correlation between attributes and the streams of ALL songs, rather than doing so for the highest streamed songs. Using our previous method, we found danceability had the highest correlation, but only with a correlation coefficient of about 0.07. After using code to select the top 100 streamed songs, we selected the variables we wanted to work with, we found the correlation coefficient for each song attribute in relation to the number of streams for each song. After finding the correlation coefficients, we calculated the mean among the coefficients for each attribute to average it out. After that, we looked for the maximum value among all the means, and found that acousticness and streams had the highest positive correlation coefficient of about 0.218. There were some previous errors due to some values being NA, but using the filter for complete cases got rid of them, and the data we did use was so large that it provided a general idea of which attribute had the greatest correlation to number of streams. 
+
+Both forms of analysis made us want to plot the top 50 songs by danceability and acousticness to see which ones seemed to be more consistent with our statistical findings. Acousticness has some peaks among the top 50, but overall, danceability seems to be consistently higher. Although acousticness has the highest correlation relative to other factors, it is too difficult to tell which attribute has the highest correlation while also being significant. If anything, the most newsworthy finding about this question may be about diversity when it comes to music taste, quality and popularity. 
 
 ```{r}
 attribute_correlate_stream <- spotify_youtube %>% 
   select(danceability, energy, key, loudness, speechiness, acousticness, instrumentalness, liveness, valence, tempo, stream) %>% 
   filter(complete.cases(.)) %>%
 
-##Find the correlation coefficient between each attribute and number of spotify streams 
+##Find the correlation coefficient between each attribute and number of Spotify streams 
    mutate(
     dance_cor = cor(danceability, stream),
     energy_cor = cor(energy, stream),
@@ -74,11 +76,46 @@ attribute_correlate_stream <- spotify_youtube %>%
 
 ##Output the highest value among the mean coefficients
 max_value <- apply(attribute_correlate_stream, 1, max)
+
+##Visualizations
+spotify_youtube %>% 
+  arrange(desc(stream)) %>% 
+  head(50) %>% 
+  ggplot()+
+  geom_bar(aes(x=track, weight=acousticness))+
+  coord_flip()+
+  theme_minimal()+
+  labs(
+    title = "Acousticness of the top 50 most streamed songs",
+    x = "Tracks",
+    y = "Acousticness value",
+    caption = "Source: Spotify and Youtube data from Kaggle"
+  )+
+  theme(
+      axis.text.y = element_text(angle = 45,  hjust=1, size=5)
+    )
+
+spotify_youtube %>% 
+  arrange(desc(stream)) %>% 
+  head(50) %>% 
+  ggplot()+
+  geom_bar(aes(x=track, weight=danceability))+
+  coord_flip()+
+  theme_minimal()+
+  labs(
+    title = "Danceability of the top 50 most streamed songs",
+    x = "Tracks",
+    y = "Danceability value",
+    caption = "Source: Spotify and Youtube data from Kaggle"
+  )+
+  theme(
+      axis.text.y = element_text(angle = 45,  hjust=1, size=5)
+    )
 ```
 
 **Question 2: Does higher engagement on YouTube videos lead to more streams of the song from the video on Spotify? Is there a relationship that exists between social engagement and streams?**
 
-**Analysis**: In order to find and map out the correlation between Youtube video views and Spotify streams, we first grouped the data by artist and then summarised the data by the sum of views and sum of streams for each artist. After that, we plotted the data into a scatter plot with a line of best fit, which shows that there is a slight positive correlation between number of views on YouTube and number of streams on Spotify. This means that it can be generally true that as one value increases, so does the other. While doing this, we divided the totals by 1,000,000 because the numbers would have been to large to easily grasp. We found that for the most part, songs that did well on Spotify tended to do well on YouTube, except for some outliers that either had a higher number of Spotify streams than YouTube views or a higher number of YouTube views than Spotify streams. For example, Maroon 5's lyric video from the studio recording of a performance on The Voice only had 26 views on YouTube but 1,004,576,500 streams on Spotify. Conversely, Kyla's HRVY Official Video had 326,427,602	on YouTube and only 24,160 streams on Spotify. For the songs that had more success on Spotify and less success	 
+**Analysis**: In order to find and map out the correlation between Youtube video views and Spotify streams, we first grouped the data by artist and then summarised the data by the sum of views and sum of streams for each artist. After that, we plotted the data into a scatter plot with a line of best fit, which shows that there is a slight positive correlation between number of views on YouTube and number of streams on Spotify. This means that it can be generally true that as one value increases, so does the other. While doing this, we divided the totals by 1,000,000 because the numbers would have been to large to easily grasp. We found that for the most part, songs that did well on Spotify tended to do well on YouTube, except for some outliers that either had a higher number of Spotify streams than YouTube views or a higher number of YouTube views than Spotify streams. For example, Maroon 5's lyric video from the studio recording of a performance on The Voice only had 26 views on YouTube but 1,004,576,500 streams on Spotify. Conversely, Kyla's HRVY Official Video had 326,427,602	on YouTube and only 24,160 streams on Spotify. 	 
 
 ```{r}
 ##Code to find the total number of views and streams (divided by 1,000,000 because numbers were too large to work with)
@@ -114,6 +151,9 @@ spotify_youtube %>%
   filter(views > 10000, stream < 100000) %>%
   group_by(artist) %>%
   arrange(desc(views))
+
+missing_vals <- spotify_youtube %>% 
+  filter()
 ```
 
 **Question 3: How many videos with a high number of streams are coming from licensed content?**
@@ -364,8 +404,5 @@ filter(album_type == "album") %>%
 So far, we think our most newsworthy piece of analysis comes from either the licensed and unlicensed content on YouTube or the analysis of artist collaborations. We think that once we are able to complete more analysis on artist collaborations, it would make for a really interesting article about who to feature on your track if you want your song to amass a lot of streams on Spotify. From what we have seen, there have not been any articles with a central focus along the lines of "Here's who to make songs with if you want them to take off," which we think could be an impactful finding in and around the music community. Also, with the consumption of video on the rise between TikTok and YouTube, we think it is newsworthy to question why certain channels have unlicensed content or how their videos can be official but unlicensed. As we learn more about how to navigate social media spaces in terms of regulating content and copyright, perhaps these findings can provide more insight for those who make social media rules or who work for the social media companies and are trying to limit unlicensed content. 
 
 **Final memo**
-  **Things to address in the memo: There are only 10 songs for each artist that show up every time analysis is done. Also it can be songs that have a youtube video to go with it because there is definitely a lot more music produced. Not representative of all music/artists. Caveat is that songs are listed more than once. How to restructure the data to make it actually useful**
-
-##describe in one sentence what the collection of 10 songs represents, spot check
-##how would you restructure the data to make it actually useful
-##are some of the views and streams low because the songs had just come out when the data was collected?
+With the rise of video sharing on social media, we found that some well-known artists publish unlicensed content of their music on YouTube, and occasionally those unlicensed videos are also listed as the official video for the track. Major Lazer, Bad Bunny, Psy and the Bee Gees were just a few of the artists whose content amassed millions or even billions of views on YouTube while being unlicensed. This finding can bleed into interesting legal issues or even stories about how these artists or channels are able to get away with posting unlicensed official videos. Most readers likely have any experience with legal matters regarding the music industry or even copyright infringement in general, so an explainer of social media practices and laws associated with the music industry could be helpful alongside the data evidence. After working with the data, we also learned that there are attributes that can be taken into consideration when it comes to the popularity of songs or artists. Similarly, we were able to compare the success of artists’ solo music and their collaborative music. While we were not able to find a clear answer of who is the best artist to collaborate with if you want your song to be a hit, we were able to find that some very popular artists get a much bigger boost from collaborative work rather than solo work. Overall, there is a fairly positive correlation between streams on Spotify and views on YouTube, but there are a few outliers where that relationship is not the case, which could also be interesting to look into further. Although the data represents the top 10 streamed songs for various artists on Spotify, the data is not a good measure or representation of the artist as a whole, nor does it allow us to make assumptions or judgments about the music industry as a whole. There is a difference between an artist who only has 10 songs that all appear on this top-streamed list compared with an artist that may have 100 songs. What about the other songs? Perhaps the songs that appear on this list are just bumps in popularity compared to their overall discography. The data also does not take the release date into consideration. Songs that were released a long time ago are more likely to be streamed more often over time compared to newer songs. Perhaps the data could be restructured by release date to give a better understanding of how music and streaming change over time, rather than just being a slight profile of an artist. It would also be more useful if the data was restructured to include more than 10 songs per artist and if it were to include another column for collaborative songs that featured all of the artists’ names rather than just listing it in the track name. A weakness of the data that we ran into was that collaborative songs were listed many times, often once per artist. And sometimes, collaborative songs were listed once under each artist but did not include “feat.” in the track name which signals an artist feature. Some strengths of the data, however, were that it did not need much cleaning and it was sort of organized in half making the columns easy to follow between Spotify data and YouTube data when they were addressing similar content. To report the story further, it would be helpful to try and obtain updated data as new songs are released every day and streams/views are constantly increasing. It would also be great to obtain more data for an even wider number of songs since there are so many produced in order to get a better picture of the whole world of music. To gain a deeper understanding of the legal aspect of music and find some anecdotal nuggets to weave in with the numerical evidence, we should start by contacting experts in law or top music executives. Then, we could also try to get statements from different artists’ public relations teams to see if those who post unlicensed content on YouTube are aware of it, and if they are, why they do so. We could relate the story to readers by discussing some of their big, beloved pop stars but also by addressing licensing issues for everyday social media users like them. This is where legal experts, smaller artists or even more data regarding licensing for videos unrelated to music could come into play.
+ 

@@ -317,11 +317,11 @@ collab_average_streams <- spotify_youtube %>%
   )
 
 non_collab_average_streams <- spotify_youtube %>%
-  filter(artist == "Camila Cabello" | artist == "Lil Nas X" | artist == "Post Malone" | artist == "Dua Lipa" | artist == "Ed Sheeran" | artist == "Drake" | artist == "Halsey" | artist =="Swae Lee" | artist == "Justin Bieber" | artist =="Nicki Minaj" | artist == "Macklemore") %>%
+  filter(artist == "Camila Cabello" | artist == "Lil Nas X" | artist == "Post Malone" | artist == "Dua Lipa" | artist == "Ed Sheeran" | artist == "Drake" | artist == "Halsey" | artist =="Swae Lee" | artist == "Justin Bieber" | artist == "Nicki Minaj" | artist == "Macklemore") %>%
  group_by(artist) %>%
   summarise(
     mean_stream_non_collab = mean(stream)
-  ) %>%
+  )
 ```
 
 ##I played around with unique words for the descriptions of YouTube videos but then decided to ditch my efforts because they weren't really that relevant to any major newsworthy findings.
